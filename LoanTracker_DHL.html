@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>DHL Loan Tracker</title>
+<style>
+:root{
+  --navy:#0D1B3E;--navy2:#1a2f5e;--navy3:#243a70;
+  --gold:#C9A84C;--gold2:#e8c46a;--gold-soft:#fdf8ec;
+  --bg:#f4f6fa;--card:#fff;--border:#dde3ef;
+  --text:#1a1a2e;--text2:#4a5568;--text3:#9aa5b8;
+  --green:#16a34a;--green-soft:#dcfce7;
+  --amber:#d97706;--amber-soft:#fef3c7;
+  --red:#dc2626;--red-soft:#fee2e2;
+  --blue:#2563eb;--blue-soft:#dbeafe;
+  --radius:14px;--radius-sm:8px;
+  --shadow:0 2px 16px rgba(13,27,62,.08);
+  --shadow-lg:0 8px 40px rgba(13,27,62,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,select{font-family:inherit}
+
+/* ── SCREENS ── */
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+
+/* ══════════════════════════════
+   MAIN DASHBOARD
+══════════════════════════════ */
+#screen-main{background:var(--bg)}
+
+.main-topbar{
+  background:var(--navy);
+  padding:14px 24px;
+  display:flex;align-items:center;gap:16px;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 16px rgba(0,0,0,.25)
+}
+.main-logo{height:52px;max-width:180px;object-fit:contain}
+.main-logo-svg{display:flex;align-items:center;gap:10px}
+.main-logo-svg .logo-box{
+  background:var(--gold);color:var(--navy);
+  font-size:18px;font-weight:900;letter-spacing:-.5px;
+  padding:6px 12px;border-radius:6px
+}
+.main-logo-svg .logo-text{color:#fff;font-size:16px;font-weight:700;letter-spacing:.02em}
+.topbar-spacer{flex:1}
+.topbar-badge{
+  background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);
+  color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;padding:5px 12px;border-radius:20px
+}
+
+/* Stats row */
+.stats-row{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
+  padding:20px 24px 0;max-width:1100px;margin:0 auto;width:100%
+}
+.stat-card{
+  background:var(--card);border-radius:var(--radius);padding:16px 18px;
+  border:1px solid var(--border);box-shadow:var(--shadow)
+}
+.stat-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:6px}
+.stat-value{font-size:26px;font-weight:900;color:var(--text)}
+.stat-sub{font-size:11px;color:var(--text3);margin-top:3px}
+
+/* Filters */
+.filters-bar{
+  display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  padding:16px 24px;max-width:1100px;margin:0 auto;width:100%
+}
+.filter-select{
+  border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  padding:8px 14px;font-size:13px;color:var(--text);background:var(--card);
+  outline:none;cursor:pointer
+}
+.filter-select:focus{border-color:var(--navy)}
+.filter-btn{
+  padding:8px 16px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;
+  border:1.5px solid var(--border);background:var(--card);color:var(--text2);transition:all .15s
+}
+.filter-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.filters-spacer{flex:1}
+.search-input{
+  border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  padding:8px 14px;font-size:13px;color:var(--text);background:var(--card);
+  outline:none;width:200px
+}
+.search-input:focus{border-color:var(--navy)}
+
+/* Loans table */
+.loans-wrap{padding:0 24px 32px;max-width:1100px;margin:0 auto;width:100%}
+.loans-table{width:100%;border-collapse:separate;border-spacing:0 8px}
+.loans-table thead th{
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--text3);padding:0 14px 4px;text-align:left
+}
+.loan-row{
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow);cursor:pointer;transition:all .18s
+}
+.loan-row:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+.loan-row td{
+  padding:14px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  vertical-align:middle
+}
+.loan-row td:first-child{border-left:1px solid var(--border);border-radius:var(--radius) 0 0 var(--radius);padding-left:18px}
+.loan-row td:last-child{border-right:1px solid var(--border);border-radius:0 var(--radius) var(--radius) 0;padding-right:18px}
+.loan-id{font-size:12px;font-weight:700;color:var(--gold);background:var(--gold-soft);padding:3px 8px;border-radius:6px;display:inline-block}
+.loan-borrower{font-size:14px;font-weight:800;color:var(--text)}
+.loan-address{font-size:11px;color:var(--text3);margin-top:2px}
+.loan-lender{font-size:12px;color:var(--text2)}
+.loan-type-badge{
+  display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px
+}
+.type-purchase{background:var(--blue-soft);color:var(--blue)}
+.type-refi{background:var(--amber-soft);color:var(--amber)}
+.stage-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;white-space:nowrap
+}
+.lo-badge{
+  background:var(--navy);color:#fff;font-size:11px;font-weight:700;
+  padding:3px 10px;border-radius:20px
+}
+.ops-badge{
+  background:var(--border);color:var(--text2);font-size:11px;font-weight:700;
+  padding:3px 10px;border-radius:20px
+}
+.cd-date{font-size:12px;font-weight:600;color:var(--text)}
+.cd-urgent{color:var(--red);font-weight:800}
+.btn-portal{
+  background:var(--navy);color:#fff;font-size:12px;font-weight:700;
+  padding:7px 14px;border-radius:var(--radius-sm);transition:all .15s
+}
+.btn-portal:hover{background:var(--gold);color:var(--navy)}
+
+/* Stage colors */
+.s0{background:#f1f5f9;color:#64748b}
+.s1{background:#ede9fe;color:#7c3aed}
+.s2{background:var(--blue-soft);color:var(--blue)}
+.s3{background:#fce7f3;color:#be185d}
+.s4{background:var(--amber-soft);color:var(--amber)}
+.s5{background:#d1fae5;color:#059669}
+.s6{background:var(--green-soft);color:var(--green)}
+.s7{background:#cffafe;color:#0891b2}
+.s8{background:#f0fdf4;color:#166534}
+.s9{background:#dcfce7;color:#15803d}
+
+/* ══════════════════════════════
+   BORROWER PIN SCREEN
+══════════════════════════════ */
+#screen-bpin{
+  background:#fff;align-items:center;justify-content:center;
+  padding:32px 24px;text-align:center;min-height:100vh
+}
+.bpin-back{
+  position:absolute;top:20px;left:20px;
+  background:var(--bg);border:1.5px solid var(--border);
+  color:var(--text2);font-size:13px;font-weight:600;
+  padding:8px 16px;border-radius:var(--radius-sm);
+  display:flex;align-items:center;gap:6px
+}
+.bpin-back:hover{background:var(--border)}
+.bpin-logo-wrap{margin:0 auto 20px;text-align:center}
+.bpin-logo-text{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--navy);padding:12px 20px;border-radius:12px
+}
+.bpin-logo-box{
+  background:var(--gold);color:var(--navy);
+  font-size:20px;font-weight:900;padding:6px 12px;border-radius:6px
+}
+.bpin-logo-label{color:#fff;font-size:16px;font-weight:700}
+.bpin-title{font-size:24px;font-weight:900;color:var(--navy);margin-bottom:6px}
+.bpin-sub{font-size:14px;color:var(--text3);margin-bottom:32px}
+.bpin-card{
+  background:var(--bg);border:1.5px solid var(--border);
+  border-radius:20px;padding:32px 28px;width:100%;max-width:360px;margin:0 auto
+}
+.bpin-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:8px;display:block;text-align:left}
+.bpin-input{
+  width:100%;background:var(--card);border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);padding:14px 16px;font-size:22px;
+  letter-spacing:.3em;color:var(--navy);font-weight:700;outline:none;
+  text-align:center;margin-bottom:16px
+}
+.bpin-input:focus{border-color:var(--navy)}
+.bpin-btn{
+  width:100%;background:var(--navy);color:#fff;border-radius:50px;
+  padding:14px;font-size:15px;font-weight:800;transition:all .2s
+}
+.bpin-btn:hover{background:var(--gold);color:var(--navy)}
+.bpin-error{font-size:12px;color:var(--red);margin-top:10px;min-height:16px;text-align:center}
+.bpin-hint{font-size:11px;color:var(--text3);margin-top:16px;text-align:center}
+
+/* ══════════════════════════════
+   BORROWER PORTAL
+══════════════════════════════ */
+#screen-borrower{background:var(--bg)}
+.bw-topbar{
+  background:var(--navy);padding:0 24px;
+  display:flex;align-items:stretch;gap:0;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 16px rgba(0,0,0,.25)
+}
+.bw-sb-back{
+  color:rgba(255,255,255,.7);font-size:22px;font-weight:700;
+  padding:16px 16px 16px 0;display:flex;align-items:center;
+  transition:color .15s
+}
+.bw-sb-back:hover{color:#fff}
+.bw-topbar-info{flex:1;padding:12px 0}
+.bw-topbar-title{font-size:16px;font-weight:900;color:#fff}
+.bw-topbar-sub{font-size:11px;color:var(--gold);font-weight:600;margin-top:2px}
+.bw-topbar-logout{
+  color:rgba(255,255,255,.5);font-size:12px;font-weight:600;
+  padding:16px 0;display:flex;align-items:center;cursor:pointer
+}
+.bw-topbar-logout:hover{color:rgba(255,255,255,.9)}
+
+.bw-body{padding:24px;max-width:700px;margin:0 auto;width:100%}
+
+.bw-hero{
+  background:var(--navy);border-radius:var(--radius);padding:24px;
+  margin-bottom:20px;
+}
+.bw-hero-name{font-size:22px;font-weight:900;color:#fff;margin-bottom:4px}
+.bw-hero-addr{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:16px}
+.bw-hero-chips{display:flex;gap:8px;flex-wrap:wrap}
+.bw-chip{
+  padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700
+}
+.bw-chip-gold{background:rgba(201,168,76,.2);border:1px solid rgba(201,168,76,.4);color:var(--gold)}
+.bw-chip-white{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8)}
+
+.bw-section-title{
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+  color:var(--text3);margin-bottom:12px;margin-top:4px
+}
+
+/* Pipeline */
+.pipeline-wrap{
+  background:var(--card);border-radius:var(--radius);border:1px solid var(--border);
+  padding:20px;margin-bottom:20px;box-shadow:var(--shadow);overflow-x:auto
+}
+.pipeline-steps{
+  display:flex;align-items:center;gap:0;min-width:600px
+}
+.pipeline-step{
+  flex:1;display:flex;flex-direction:column;align-items:center;position:relative
+}
+.pipeline-step:not(:last-child)::after{
+  content:'';position:absolute;top:14px;left:50%;right:-50%;
+  height:3px;background:var(--border);z-index:0
+}
+.pipeline-step.done:not(:last-child)::after{background:var(--green)}
+.pipeline-step.current:not(:last-child)::after{background:var(--border)}
+.ps-dot{
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;z-index:1;position:relative;
+  border:3px solid var(--border);background:var(--bg);color:var(--text3)
+}
+.pipeline-step.done .ps-dot{background:var(--green);border-color:var(--green);color:#fff}
+.pipeline-step.current .ps-dot{
+  background:var(--navy);border-color:var(--gold);color:#fff;
+  box-shadow:0 0 0 4px rgba(201,168,76,.25)
+}
+.ps-label{font-size:9px;font-weight:700;text-align:center;margin-top:6px;color:var(--text3);line-height:1.3}
+.pipeline-step.done .ps-label{color:var(--green)}
+.pipeline-step.current .ps-label{color:var(--navy);font-weight:800}
+
+/* Info cards */
+.bw-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.bw-info-card{
+  background:var(--card);border-radius:var(--radius-sm);border:1px solid var(--border);
+  padding:14px 16px;box-shadow:var(--shadow)
+}
+.bw-info-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:4px}
+.bw-info-value{font-size:14px;font-weight:700;color:var(--text)}
+.bw-info-value.highlight{color:var(--navy);font-size:16px;font-weight:900}
+
+/* Message box */
+.bw-message{
+  background:var(--gold-soft);border:1px solid rgba(201,168,76,.3);
+  border-radius:var(--radius);padding:16px 18px;margin-bottom:20px
+}
+.bw-message-title{font-size:13px;font-weight:800;color:var(--navy);margin-bottom:4px}
+.bw-message-text{font-size:13px;color:var(--text2);line-height:1.6}
+
+/* Checklist */
+.bw-checklist{
+  background:var(--card);border-radius:var(--radius);border:1px solid var(--border);
+  padding:18px;box-shadow:var(--shadow);margin-bottom:20px
+}
+.bw-check-item{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 0;border-bottom:1px solid var(--border);font-size:13px
+}
+.bw-check-item:last-child{border-bottom:none}
+.bw-check-icon{font-size:16px;flex-shrink:0}
+.bw-check-text{color:var(--text2)}
+.bw-check-text.done{color:var(--text3);text-decoration:line-through}
+
+/* Toast */
+#toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:var(--navy);color:#fff;padding:10px 22px;
+  border-radius:20px;font-size:13px;font-weight:600;
+  opacity:0;transition:opacity .3s;pointer-events:none;z-index:9999
+}
+#toast.show{opacity:1}
+
+/* Responsive */
+@media(max-width:768px){
+  .stats-row{grid-template-columns:1fr 1fr}
+  .main-topbar{padding:12px 16px}
+  .loans-wrap{padding:0 12px 24px}
+  .filters-bar{padding:12px 16px}
+  .bw-cards{grid-template-columns:1fr}
+  .bw-body{padding:16px}
+  .loans-table thead{display:none}
+  .loan-row td{display:block;border:none!important;padding:6px 14px}
+  .loan-row td:first-child{padding-top:14px;border-radius:var(--radius) var(--radius) 0 0!important}
+  .loan-row td:last-child{padding-bottom:14px;border-radius:0 0 var(--radius) var(--radius)!important}
+  .loan-row{border:1px solid var(--border)!important;border-radius:var(--radius)!important}
+}
+</style>
+</head>
+<body>
+
+<div id="toast"></div>
+
+<!-- ══════════════════════════════
+     SCREEN: MAIN DASHBOARD
+══════════════════════════════ -->
+<div class="screen active" id="screen-main">
+  <div class="main-topbar">
+    <div class="main-logo-svg">
+      <div class="logo-box">DHL</div>
+      <div class="logo-text">Loan Tracker</div>
+    </div>
+    <div class="topbar-spacer"></div>
+    <div class="topbar-badge" id="topbar-date">Pipeline 2026</div>
+  </div>
+
+  <div class="stats-row" id="stats-row">
+    <!-- filled by JS -->
+  </div>
+
+  <div class="filters-bar">
+    <select class="filter-select" id="filter-lo" onchange="applyFilters()">
+      <option value="">All LOs</option>
+      <option value="Joel">Joel</option>
+      <option value="Edwin">Edwin</option>
+      <option value="Mario">Mario</option>
+      <option value="Silvia">Silvia</option>
+    </select>
+    <select class="filter-select" id="filter-type" onchange="applyFilters()">
+      <option value="">All Types</option>
+      <option value="Purchase">Purchase</option>
+      <option value="Refinance">Refinance</option>
+    </select>
+    <select class="filter-select" id="filter-stage" onchange="applyFilters()">
+      <option value="">All Stages</option>
+    </select>
+    <div class="filters-spacer"></div>
+    <input class="search-input" id="search-input" type="text" placeholder="🔍 Search borrower..." oninput="applyFilters()">
+  </div>
+
+  <div class="loans-wrap">
+    <table class="loans-table">
+      <thead>
+        <tr>
+          <th>LP# · Borrower</th>
+          <th>Lender · Type</th>
+          <th>Stage</th>
+          <th>LO · Ops</th>
+          <th>Closing Date</th>
+          <th>Portal</th>
+        </tr>
+      </thead>
+      <tbody id="loans-tbody">
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: BORROWER PIN
+══════════════════════════════ -->
+<div class="screen" id="screen-bpin" style="position:relative">
+  <button class="bpin-back" onclick="goTo('screen-main')">&#8592; Main Menu</button>
+
+  <div class="bpin-logo-wrap">
+    <div class="bpin-logo-text">
+      <div class="bpin-logo-box">DHL</div>
+      <div class="bpin-logo-label">Loan Tracker</div>
+    </div>
+  </div>
+
+  <div class="bpin-title">Borrower Portal</div>
+  <div class="bpin-sub">Enter your 4-digit PIN to access your loan status</div>
+
+  <div class="bpin-card">
+    <label class="bpin-label" for="bpin-input">Your PIN</label>
+    <input class="bpin-input" id="bpin-input" type="password" maxlength="4" placeholder="••••"
+      oninput="this.value=this.value.replace(/\D/g,'')" onkeydown="if(event.key==='Enter')verifyBPin()">
+    <button class="bpin-btn" onclick="verifyBPin()">Access My Loan →</button>
+    <div class="bpin-error" id="bpin-error"></div>
+    <div class="bpin-hint">Your PIN was provided by your Loan Officer.<br>Need help? Call your DHL team.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: BORROWER PORTAL
+══════════════════════════════ -->
+<div class="screen" id="screen-borrower">
+  <div class="bw-topbar">
+    <button class="bw-sb-back" onclick="goTo('screen-main')">&#8592;</button>
+    <div class="bw-topbar-info">
+      <div class="bw-topbar-title" id="bw-topbar-name">Borrower Portal</div>
+      <div class="bw-topbar-sub" id="bw-topbar-sub">DHL Mortgage</div>
+    </div>
+    <button class="bw-topbar-logout" onclick="goTo('screen-main')">Logout</button>
+  </div>
+
+  <div class="bw-body" id="bw-body">
+    <!-- filled dynamically -->
+  </div>
+</div>
+
+<script>
+/* ═══════════════════
+   DATA
+═══════════════════ */
+const STAGE_LABELS = [
+  'Lead','Pre-Approval','Application','Processing',
+  'Submitted UW','Cond. Approval','Clear to Close',
+  'Closing','Funded','Closed'
+];
+const STAGE_EMOJI = ['📋','✅','📝','⚙️','📨','🟡','🟢','🏠','💰','🎉'];
+
+function detectState(addr){
+  if(!addr) return '';
+  const a = addr.toUpperCase();
+  if(a.includes(', VA ') || a.includes(',VA ')) return 'VA';
+  if(a.includes(', MD ') || a.includes(',MD ')) return 'MD';
+  if(a.includes(', DC ') || a.includes(',DC ')) return 'DC';
+  return '';
+}
+
+const loans = [
+  {id:'1419',borrower:'Carrillo',loanAmount:'—',lender:'Deephaven Lending',loanType:'Refinance',loanProgram:'Conventional',opsCode:'KS',address:'2901 Reed Street, Glenarden, MD 20706',lo:'Joel',stage:0,closingDate:'2026-04-10',stageDate:'2026-05-20',pin:'1419'},
+  {id:'427', borrower:'Ramirez',loanAmount:'—',lender:'UWM',loanType:'Purchase',loanProgram:'Conventional',opsCode:'DR',address:'13825 Woodland Heights Drive, Hagerstown, MD 21742',lo:'Joel',stage:6,closingDate:'2026-05-26',stageDate:'2026-05-20',pin:'0427'},
+  {id:'1473',borrower:'Arias',loanAmount:'—',lender:'UWM',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',address:'1517 Crest Road, Silver Spring, MD 20902',lo:'Edwin',stage:6,closingDate:'2026-05-22',stageDate:'2026-05-19',pin:'1473'},
+  {id:'1466',borrower:'Crespin',loanAmount:'—',lender:'UWM',loanType:'Purchase',loanProgram:'Conventional',opsCode:'DR',address:'6810 Robinia Road, Temple Hills, MD 20748',lo:'Mario',stage:4,closingDate:'2026-06-15',stageDate:'2026-05-18',pin:'1466'},
+  {id:'1463',borrower:'Dorcely',loanAmount:'—',lender:'UWM',loanType:'Purchase',loanProgram:'FHA',opsCode:'DR',address:'11122 Oak Leaf Drive Unit 88, Silver Spring, MD 20901',lo:'Silvia',stage:4,closingDate:'2026-06-20',stageDate:'2026-05-17',pin:'1463'},
+  {id:'1452',borrower:'Lopez',loanAmount:'—',lender:'Pennymac',loanType:'Refinance',loanProgram:'FHA',opsCode:'DR',address:'1420 Indiana Avenue, Woodbridge, VA 22191',lo:'Mario',stage:4,closingDate:'2026-06-10',stageDate:'2026-05-15',pin:'1452'},
+  {id:'1477',borrower:'Montero',loanAmount:'—',lender:'UWM',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',address:'4512 31st Street, Mount Rainier, MD 20712',lo:'Joel',stage:1,closingDate:'2026-07-01',stageDate:'2026-05-20',pin:'1477'},
+  {id:'1485',borrower:'Torres',firstName:'Gabriel',loanAmount:'—',lender:'LendingPros',loanType:'Purchase',loanProgram:'Non-QM',opsCode:'DR',address:'19021 Grotto Lane, Germantown, MD 20874',lo:'Edwin',stage:4,closingDate:'2026-06-25',stageDate:'2026-05-19',pin:'1485'},
+  {id:'1448',borrower:'Lopez del Aguila',firstName:'Isaac',loanAmount:'—',lender:'HomeXpress Mortgage',loanType:'Refinance',loanProgram:'Non-QM',opsCode:'DR',address:'1516 Opus Avenue, Capitol Heights, MD 20743',lo:'Silvia',stage:2,closingDate:'2026-06-30',stageDate:'2026-05-16',pin:'1448'}
+].map(l=>({...l, state: detectState(l.address)}));
+
+/* ═══════════════════
+   STATE
+═══════════════════ */
+let currentBorrower = null;
+
+/* ═══════════════════
+   NAVIGATION
+═══════════════════ */
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+/* ═══════════════════
+   TOAST
+═══════════════════ */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+/* ═══════════════════
+   STATS
+═══════════════════ */
+function renderStats(){
+  const total = loans.length;
+  const ctc = loans.filter(l=>l.stage===6).length;
+  const inProcess = loans.filter(l=>l.stage>=1&&l.stage<=5).length;
+  const closing7 = loans.filter(l=>{
+    if(!l.closingDate) return false;
+    const d = new Date(l.closingDate);
+    const diff = (d - new Date()) / 86400000;
+    return diff >= 0 && diff <= 7;
+  }).length;
+
+  document.getElementById('stats-row').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-label">Total Pipeline</div>
+      <div class="stat-value">${total}</div>
+      <div class="stat-sub">Active loans</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">In Process</div>
+      <div class="stat-value">${inProcess}</div>
+      <div class="stat-sub">Pre-approval → UW</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Clear to Close</div>
+      <div class="stat-value" style="color:var(--green)">${ctc}</div>
+      <div class="stat-sub">Ready to close</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Closing ≤7 days</div>
+      <div class="stat-value" style="color:var(--red)">${closing7}</div>
+      <div class="stat-sub">Urgent attention</div>
+    </div>
+  `;
+}
+
+/* ═══════════════════
+   STAGE FILTER POPULATE
+═══════════════════ */
+function populateStageFilter(){
+  const sel = document.getElementById('filter-stage');
+  STAGE_LABELS.forEach((lbl,i)=>{
+    const opt = document.createElement('option');
+    opt.value = i; opt.textContent = `${i} – ${lbl}`;
+    sel.appendChild(opt);
+  });
+}
+
+/* ═══════════════════
+   RENDER TABLE
+═══════════════════ */
+function renderLoans(list){
+  const tbody = document.getElementById('loans-tbody');
+  if(!list.length){
+    tbody.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text3);font-size:14px">No loans match your filters</td></tr>`;
+    return;
+  }
+
+  const today = new Date();
+  tbody.innerHTML = list.map(l=>{
+    const typeClass = l.loanType==='Purchase'?'type-purchase':'type-refi';
+    const stageClass = `s${l.stage}`;
+    const cdDate = l.closingDate ? new Date(l.closingDate) : null;
+    const daysLeft = cdDate ? Math.ceil((cdDate - today)/86400000) : null;
+    const urgentClass = (daysLeft!==null && daysLeft<=7) ? 'cd-urgent' : 'cd-date';
+    const cdDisplay = cdDate ? `${cdDate.toLocaleDateString('en-US',{month:'short',day:'numeric'})}${daysLeft!==null&&daysLeft<=7?` ⚠️ ${daysLeft}d`:''}` : '—';
+
+    return `
+    <tr class="loan-row" onclick="openBorrowerPin('${l.id}')">
+      <td>
+        <div class="loan-id">LP# ${l.id}</div>
+        <div class="loan-borrower" style="margin-top:4px">${l.firstName||l.borrower}</div>
+        <div class="loan-address">${l.address}</div>
+      </td>
+      <td>
+        <div class="loan-lender">${l.lender}</div>
+        <div style="margin-top:4px">
+          <span class="loan-type-badge ${typeClass}">${l.loanType}</span>
+          ${l.loanProgram?`<span style="font-size:10px;color:var(--text3);margin-left:4px">${l.loanProgram}</span>`:''}
+        </div>
+      </td>
+      <td>
+        <div class="stage-pill ${stageClass}">
+          ${STAGE_EMOJI[l.stage]} ${STAGE_LABELS[l.stage]}
+        </div>
+        <div style="font-size:10px;color:var(--text3);margin-top:3px">Stage ${l.stage} of 9</div>
+      </td>
+      <td>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="lo-badge">${l.lo}</span>
+          <span class="ops-badge">${l.opsCode}</span>
+        </div>
+        ${l.state?`<div style="font-size:10px;color:var(--text3);margin-top:3px">${l.state}</div>`:''}
+      </td>
+      <td><span class="${urgentClass}">${cdDisplay}</span></td>
+      <td>
+        <button class="btn-portal" onclick="event.stopPropagation();openBorrowerPin('${l.id}')">
+          View →
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+/* ═══════════════════
+   FILTERS
+═══════════════════ */
+function applyFilters(){
+  const lo = document.getElementById('filter-lo').value;
+  const type = document.getElementById('filter-type').value;
+  const stage = document.getElementById('filter-stage').value;
+  const q = document.getElementById('search-input').value.toLowerCase().trim();
+
+  const filtered = loans.filter(l=>{
+    if(lo && l.lo !== lo) return false;
+    if(type && l.loanType !== type) return false;
+    if(stage !== '' && l.stage !== parseInt(stage)) return false;
+    if(q && !l.borrower.toLowerCase().includes(q) && !l.id.includes(q) && !l.address.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  renderLoans(filtered);
+}
+
+/* ═══════════════════
+   BORROWER PIN
+═══════════════════ */
+function openBorrowerPin(loanId){
+  currentBorrower = loanId;
+  document.getElementById('bpin-input').value='';
+  document.getElementById('bpin-error').textContent='';
+  goTo('screen-bpin');
+}
+
+function verifyBPin(){
+  const pin = document.getElementById('bpin-input').value.trim();
+  const loan = loans.find(l=>l.id === currentBorrower);
+  const err = document.getElementById('bpin-error');
+
+  if(!pin){err.textContent='Please enter your PIN';return;}
+
+  // Staff override
+  const staffPins = {
+    'LO2026': true, 'ADMIN': true, 'DHL2026': true
+  };
+
+  if(staffPins[pin.toUpperCase()] || (loan && (pin === loan.pin || pin === loan.id))){
+    err.textContent='';
+    renderBorrowerPortal(loan);
+    goTo('screen-borrower');
+  } else {
+    err.textContent='Incorrect PIN. Please try again.';
+    document.getElementById('bpin-input').value='';
+    document.getElementById('bpin-input').focus();
+  }
+}
+
+/* ═══════════════════
+   BORROWER PORTAL
+═══════════════════ */
+function renderBorrowerPortal(loan){
+  if(!loan) return;
+
+  document.getElementById('bw-topbar-name').textContent = loan.firstName || loan.borrower;
+  document.getElementById('bw-topbar-sub').textContent = `LP# ${loan.id} · ${loan.lender}`;
+
+  const today = new Date();
+  const cdDate = loan.closingDate ? new Date(loan.closingDate) : null;
+  const daysLeft = cdDate ? Math.ceil((cdDate - today)/86400000) : null;
+
+  // Pipeline steps
+  const pipelineHTML = STAGE_LABELS.map((lbl,i)=>{
+    const cls = i < loan.stage ? 'done' : i === loan.stage ? 'current' : '';
+    const check = i < loan.stage ? '✓' : i === loan.stage ? '●' : (i+1);
+    return `<div class="pipeline-step ${cls}">
+      <div class="ps-dot">${check}</div>
+      <div class="ps-label">${lbl}</div>
+    </div>`;
+  }).join('');
+
+  // Stage message
+  const messages = {
+    0: {title:'Your loan is being reviewed',text:'Our team is reviewing your file and will be in touch shortly.'},
+    1: {title:'Pre-Approval in progress',text:'We are working on your pre-approval. Please make sure all documents are submitted.'},
+    2: {title:'Application received',text:'Your application is complete and under review by our processing team.'},
+    3: {title:'In Processing',text:'Your loan is being processed. We may reach out if additional documents are needed.'},
+    4: {title:'Submitted to Underwriting',text:'Your file has been submitted to the underwriter. This typically takes 3–5 business days.'},
+    5: {title:'Conditional Approval! 🎉',text:'Great news! Your loan is conditionally approved. We will contact you with any remaining conditions.'},
+    6: {title:'Clear to Close! 🟢',text:'Congratulations! Your loan is clear to close. Please coordinate with your title company for closing.'},
+    7: {title:'Closing Scheduled',text:'Your closing is scheduled. Review your Closing Disclosure carefully before signing.'},
+    8: {title:'Loan Funded! 💰',text:'Your loan has been funded. Funds are on their way to the title company.'},
+    9: {title:'Loan Closed! 🎉',text:'Congratulations on your new home/loan! Thank you for choosing DHL Mortgage.'}
+  };
+
+  const msg = messages[loan.stage] || messages[0];
+
+  // Checklist based on stage
+  const checks = getChecklist(loan.stage);
+
+  document.getElementById('bw-body').innerHTML = `
+    <div class="bw-hero">
+      <div class="bw-hero-name">${loan.firstName||loan.borrower} ${loan.borrower!==loan.firstName?loan.borrower:''}</div>
+      <div class="bw-hero-addr">${loan.address}</div>
+      <div class="bw-hero-chips">
+        <span class="bw-chip bw-chip-gold">LP# ${loan.id}</span>
+        <span class="bw-chip bw-chip-white">${loan.lender}</span>
+        <span class="bw-chip bw-chip-white">${loan.loanType}</span>
+        ${loan.loanProgram?`<span class="bw-chip bw-chip-white">${loan.loanProgram}</span>`:''}
+        ${loan.state?`<span class="bw-chip bw-chip-white">${loan.state}</span>`:''}
+      </div>
+    </div>
+
+    <div class="bw-section-title">Loan Progress</div>
+    <div class="pipeline-wrap">
+      <div class="pipeline-steps">${pipelineHTML}</div>
+    </div>
+
+    <div class="bw-cards">
+      <div class="bw-info-card">
+        <div class="bw-info-label">Current Stage</div>
+        <div class="bw-info-value highlight">${STAGE_EMOJI[loan.stage]} ${STAGE_LABELS[loan.stage]}</div>
+      </div>
+      <div class="bw-info-card">
+        <div class="bw-info-label">Closing Date</div>
+        <div class="bw-info-value highlight" style="${daysLeft!==null&&daysLeft<=7?'color:var(--red)':''}">
+          ${cdDate ? cdDate.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : 'TBD'}
+          ${daysLeft!==null&&daysLeft>0?`<div style="font-size:11px;margin-top:2px">${daysLeft} days away</div>`:''}
+        </div>
+      </div>
+      <div class="bw-info-card">
+        <div class="bw-info-label">Loan Officer</div>
+        <div class="bw-info-value">${loan.lo}</div>
+      </div>
+      <div class="bw-info-card">
+        <div class="bw-info-label">Processor</div>
+        <div class="bw-info-value">${loan.opsCode}</div>
+      </div>
+    </div>
+
+    <div class="bw-message">
+      <div class="bw-message-title">${msg.title}</div>
+      <div class="bw-message-text">${msg.text}</div>
+    </div>
+
+    <div class="bw-section-title">Document Checklist</div>
+    <div class="bw-checklist">
+      ${checks}
+    </div>
+  `;
+}
+
+function getChecklist(stage){
+  const items = [
+    {label:'Application (1003) submitted', done: stage >= 2},
+    {label:'ID & Social Security verified', done: stage >= 2},
+    {label:'Income documents (W2/Tax returns)', done: stage >= 3},
+    {label:'Bank statements (2 months)', done: stage >= 3},
+    {label:'Submitted to underwriting', done: stage >= 4},
+    {label:'Appraisal ordered', done: stage >= 4},
+    {label:'Conditions cleared', done: stage >= 5},
+    {label:'Clear to Close issued', done: stage >= 6},
+    {label:'Closing Disclosure signed', done: stage >= 7},
+    {label:'Loan funded', done: stage >= 8},
+  ];
+  return items.map(item=>`
+    <div class="bw-check-item">
+      <span class="bw-check-icon">${item.done?'✅':'⬜'}</span>
+      <span class="bw-check-text${item.done?' done':''}">${item.label}</span>
+    </div>
+  `).join('');
+}
+
+/* ═══════════════════
+   INIT
+═══════════════════ */
+function init(){
+  // Date badge
+  document.getElementById('topbar-date').textContent =
+    new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+
+  renderStats();
+  populateStageFilter();
+  renderLoans(loans);
+}
+
+init();
+</script>
+</body>
+</html>
