@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>District Home Loans · Tracker</title>
+<style>
+:root{
+  --navy:#0D1B3E;--navy2:#1a2f5e;--navy3:#243a70;
+  --red:#C8102E;--red2:#a00e24;
+  --bg:#f4f6fa;--card:#fff;--border:#dde3ef;
+  --text:#1a1a2e;--text2:#4a5568;--text3:#9aa5b8;
+  --green:#16a34a;--green-soft:#dcfce7;
+  --amber:#d97706;--amber-soft:#fef3c7;
+  --alert:#dc2626;--alert-soft:#fee2e2;
+  --blue:#2563eb;--blue-soft:#dbeafe;
+  --radius:14px;--radius-sm:8px;
+  --shadow:0 2px 16px rgba(13,27,62,.08);
+  --shadow-lg:0 8px 40px rgba(13,27,62,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,select,textarea{font-family:inherit}
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+
+/* ── LANDING ────────────────────────────────── */
+#screen-landing{background:#fff;align-items:center;justify-content:center;padding:40px 24px;text-align:center}
+.dhl-wordmark{font-size:28px;font-weight:900;letter-spacing:.04em;color:var(--navy);line-height:1}
+.dhl-wordmark span{color:var(--red)}
+.dhl-flag{display:flex;gap:3px;margin:6px auto 0;width:fit-content}
+.dhl-flag-bar{height:5px;border-radius:2px}
+.dhl-tagline{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);margin:6px 0 40px}
+.role-title{font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:20px}
+.role-cards{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;max-width:700px}
+.role-card{width:180px;background:var(--navy);border-radius:var(--radius);padding:28px 20px;cursor:pointer;transition:all .2s;border:2px solid transparent}
+.role-card:hover{background:var(--navy2);transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.role-card.ops{background:var(--red)}.role-card.ops:hover{background:var(--red2)}
+.role-card.borrower{background:var(--bg);border-color:var(--border)}.role-card.borrower:hover{border-color:var(--navy);background:#fff}
+.role-icon{font-size:32px;margin-bottom:12px}
+.role-name{font-size:15px;font-weight:800;margin-bottom:4px}
+.role-desc{font-size:11px;opacity:.7;line-height:1.4}
+.role-card:not(.borrower) .role-name,.role-card:not(.borrower) .role-desc{color:#fff}
+.role-card:not(.borrower) .role-desc{opacity:.7}
+.role-card.borrower .role-name{color:var(--navy)}.role-card.borrower .role-desc{color:var(--text3)}
+.landing-footer{margin-top:40px;font-size:12px;color:var(--text3)}
+.landing-footer a{color:var(--red);text-decoration:none;font-weight:600}
+
+/* ── TOPBAR (dashboard) ─────────────────────── */
+.topbar{background:var(--navy);padding:12px 24px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.25)}
+.topbar.red-bar{background:var(--red)}
+.tb-back{color:rgba(255,255,255,.7);font-size:22px;font-weight:700;padding:4px 10px 4px 0;transition:color .15s}.tb-back:hover{color:#fff}
+.tb-logo{display:flex;align-items:center;gap:8px}
+.tb-logo-box{background:#fff;color:var(--navy);font-size:13px;font-weight:900;padding:4px 8px;border-radius:5px;letter-spacing:.02em}
+.tb-logo-text{color:#fff;font-size:14px;font-weight:700}
+.tb-role-badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 12px;border-radius:20px}
+.tb-spacer{flex:1}.tb-date{color:rgba(255,255,255,.5);font-size:12px}
+
+/* ── STATS & FILTERS (dashboard) ───────────── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:20px 24px 0;max-width:1100px;margin:0 auto;width:100%}
+.stat-card{background:var(--card);border-radius:var(--radius);padding:16px 18px;border:1px solid var(--border);box-shadow:var(--shadow)}
+.stat-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:6px}
+.stat-value{font-size:28px;font-weight:900;color:var(--text)}.stat-sub{font-size:11px;color:var(--text3);margin-top:3px}
+.filters-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:16px 24px;max-width:1100px;margin:0 auto;width:100%}
+.filter-select{border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:8px 14px;font-size:13px;color:var(--text);background:var(--card);outline:none;cursor:pointer}
+.filter-select:focus{border-color:var(--navy)}.filter-select:disabled{opacity:.55;cursor:default}
+.filters-spacer{flex:1}
+.search-input{border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:8px 14px;font-size:13px;color:var(--text);background:var(--card);outline:none;width:220px}
+.search-input:focus{border-color:var(--navy)}
+
+/* ── LOANS TABLE ────────────────────────────── */
+.loans-wrap{padding:0 24px 32px;max-width:1100px;margin:0 auto;width:100%}
+.loans-table{width:100%;border-collapse:separate;border-spacing:0 8px}
+.loans-table thead th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);padding:0 14px 4px;text-align:left}
+.loan-row{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);cursor:pointer;transition:all .18s}
+.loan-row:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+.loan-row td{padding:14px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);vertical-align:middle}
+.loan-row td:first-child{border-left:1px solid var(--border);border-radius:var(--radius) 0 0 var(--radius);padding-left:18px}
+.loan-row td:last-child{border-right:1px solid var(--border);border-radius:0 var(--radius) var(--radius) 0;padding-right:18px}
+.loan-id{font-size:12px;font-weight:700;color:var(--red);background:#fef2f2;padding:3px 8px;border-radius:6px;display:inline-block}
+.loan-borrower{font-size:14px;font-weight:800;color:var(--text)}.loan-address{font-size:11px;color:var(--text3);margin-top:2px}
+.loan-lender{font-size:12px;color:var(--text2)}
+.loan-type-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+.type-purchase{background:var(--blue-soft);color:var(--blue)}.type-refi{background:var(--amber-soft);color:var(--amber)}
+.stage-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;white-space:nowrap}
+.lo-badge{background:var(--navy);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.ops-badge{background:var(--border);color:var(--text2);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.cd-date{font-size:12px;font-weight:600;color:var(--text)}.cd-urgent{color:var(--alert);font-weight:800;font-size:12px}
+.btn-view{background:var(--navy);color:#fff;font-size:12px;font-weight:700;padding:7px 16px;border-radius:var(--radius-sm);transition:all .15s}.btn-view:hover{background:var(--red)}
+.s0{background:#f1f5f9;color:#64748b}.s1{background:#ede9fe;color:#7c3aed}
+.s2{background:var(--blue-soft);color:var(--blue)}.s3{background:#fce7f3;color:#be185d}
+.s4{background:var(--amber-soft);color:var(--amber)}.s5{background:#d1fae5;color:#059669}
+.s6{background:var(--green-soft);color:var(--green)}.s7{background:#cffafe;color:#0891b2}
+.s8{background:#f0fdf4;color:#166534}.s9{background:#dcfce7;color:#15803d}
+
+/* ── PIN SCREENS ────────────────────────────── */
+.pin-screen-base{background:#fff;align-items:center;justify-content:center;padding:32px 24px;text-align:center;position:relative}
+.pin-back{position:absolute;top:20px;left:20px;background:var(--bg);border:1.5px solid var(--border);color:var(--text2);font-size:13px;font-weight:600;padding:8px 16px;border-radius:var(--radius-sm);display:flex;align-items:center;gap:6px}.pin-back:hover{background:var(--border)}
+.pin-logo{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;margin-bottom:20px}
+.pin-logo.navy{background:var(--navy)}.pin-logo.red{background:var(--red)}
+.pin-logo-box{background:#fff;color:var(--navy);font-size:14px;font-weight:900;padding:4px 8px;border-radius:5px}
+.pin-logo-text{color:#fff;font-size:14px;font-weight:700}
+.pin-title{font-size:22px;font-weight:900;color:var(--navy);margin-bottom:6px}
+.pin-sub{font-size:13px;color:var(--text3);margin-bottom:28px}
+.pin-card{background:var(--bg);border:1.5px solid var(--border);border-radius:20px;padding:28px 24px;width:100%;max-width:340px;margin:0 auto}
+.pin-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:8px;display:block;text-align:left}
+.pin-input{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;font-size:22px;letter-spacing:.3em;color:var(--navy);font-weight:700;outline:none;text-align:center;margin-bottom:16px}
+.pin-input:focus{border-color:var(--navy)}
+.pin-btn{width:100%;color:#fff;border-radius:50px;padding:14px;font-size:15px;font-weight:800;transition:all .2s;border:none;cursor:pointer}
+.pin-btn.navy{background:var(--navy)}.pin-btn.navy:hover{background:var(--red)}
+.pin-btn.red{background:var(--red)}.pin-btn.red:hover{background:var(--red2)}
+.pin-error{font-size:12px;color:var(--alert);margin-top:10px;min-height:16px;text-align:center}
+.pin-hint{font-size:11px;color:var(--text3);margin-top:14px;line-height:1.6}
+.lo-selector{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+.lo-btn{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:12px 20px;font-size:14px;font-weight:700;color:var(--navy);transition:all .18s;cursor:pointer;min-width:110px}
+.lo-btn:hover,.lo-btn.selected{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* ══════════════════════════════════════════════
+   BORROWER PORTAL — FULL NEW DESIGN
+══════════════════════════════════════════════ */
+#screen-borrower{background:#f0f2f7}
+
+/* Topbar */
+.bw-topbar{background:var(--navy);padding:0 20px;height:62px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.3)}
+
+/* DHL Real Logo — recreación fiel */
+.bw-logo{display:flex;align-items:center;gap:10px;flex:1}
+.bw-dhl-logo{display:flex;flex-direction:column;align-items:flex-start;line-height:1;gap:0;cursor:pointer}
+.bw-dhl-word1{font-size:9.5px;font-weight:900;letter-spacing:.18em;color:#fff;text-transform:uppercase;line-height:1}
+.bw-dhl-word2{font-size:9.5px;font-weight:900;letter-spacing:.08em;color:#fff;text-transform:uppercase;line-height:1.15;display:flex;align-items:center;gap:0}
+.bw-dhl-word2 .dhl-star{color:var(--red);font-size:9px;line-height:1}
+.bw-dhl-word3{font-size:9.5px;font-weight:900;letter-spacing:.22em;color:#fff;text-transform:uppercase;line-height:1}
+.bw-dhl-bars{display:flex;gap:2px;margin-top:3px}
+.bw-dhl-bar{height:3px;border-radius:1px}
+
+/* Topbar right controls */
+.lang-toggle{display:flex;align-items:center;gap:0;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:2px;overflow:hidden}
+.lang-globe{color:rgba(255,255,255,.7);font-size:13px;padding:0 6px 0 8px;display:flex;align-items:center}
+.lang-btn{color:rgba(255,255,255,.6);font-size:12px;font-weight:800;letter-spacing:.06em;padding:5px 11px;border-radius:16px;transition:all .18s;border:none;background:none;cursor:pointer;line-height:1}
+.lang-btn.active{color:var(--navy);background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.lang-btn:not(.active):hover{color:#fff;background:rgba(255,255,255,.1)}
+.lang-sep{color:rgba(255,255,255,.25);font-size:11px;line-height:1}
+
+/* Back/Home button — prominente, siempre visible */
+.bw-home-btn{color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:20px;transition:all .18s;border:1.5px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);cursor:pointer;white-space:nowrap}
+.bw-home-btn:hover{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.5)}
+.bw-logout-btn{color:rgba(255,255,255,.5);font-size:11px;font-weight:600;display:flex;align-items:center;gap:4px;padding:6px 10px;border-radius:16px;transition:all .15s;border:none;background:none;cursor:pointer;white-space:nowrap}
+.bw-logout-btn:hover{color:rgba(255,255,255,.85)}
+
+/* Body */
+.bw-body{max-width:860px;margin:0 auto;padding:24px 20px 60px;width:100%}
+
+/* ── HERO CARD ── */
+.bw-hero-card{background:#fff;border-radius:20px;box-shadow:var(--shadow-lg);overflow:hidden;display:grid;grid-template-columns:1fr 1fr;margin-bottom:20px;min-height:280px}
+.bw-hero-left{padding:32px 32px 32px 36px;display:flex;flex-direction:column;justify-content:center}
+.bw-hero-greeting-hola{font-size:30px;font-style:italic;color:var(--red);font-weight:700;line-height:1;margin-bottom:2px}
+.bw-hero-greeting-name{font-size:38px;font-weight:900;color:var(--navy);line-height:1.1;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.bw-hero-tagline{font-size:13px;color:var(--text2);line-height:1.7;font-weight:500;margin-bottom:18px;max-width:340px}
+.bw-trust{display:flex;align-items:flex-start;gap:10px;background:#fef2f2;border-radius:10px;padding:12px 14px}
+.bw-trust-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.bw-trust-text{font-size:12px;color:var(--text2);line-height:1.6}
+
+.bw-hero-right{position:relative;overflow:hidden;background:var(--navy)}
+/* CSS-only premium interior — no external images needed */
+.bw-hero-photo{
+  width:100%;height:100%;position:relative;
+  background:linear-gradient(145deg,var(--navy) 0%,#1e3a6e 50%,var(--navy3) 100%);
+}
+/* Floor */
+.bw-hero-photo::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:38%;
+  background:linear-gradient(180deg,#1c2f5a 0%,#16274f 100%);
+  border-radius:0;
+}
+/* Window / light glow */
+.bw-hero-photo::after{
+  content:'';position:absolute;top:12%;right:14%;width:52%;height:54%;
+  background:linear-gradient(135deg,rgba(255,220,140,.18) 0%,rgba(255,200,100,.08) 60%,transparent 100%);
+  border-radius:12px;
+  box-shadow:0 0 60px 20px rgba(255,200,100,.07);
+}
+/* Sofa silhouette */
+.bw-hero-sofa{
+  position:absolute;bottom:28%;left:50%;transform:translateX(-50%);
+  width:64%;height:22%;
+  background:linear-gradient(180deg,#2a4070 0%,#1e3060 100%);
+  border-radius:14px 14px 4px 4px;
+}
+.bw-hero-sofa::before{
+  content:'';position:absolute;bottom:100%;left:5%;right:5%;height:40%;
+  background:linear-gradient(180deg,#3a5080 0%,#2a4070 100%);
+  border-radius:10px 10px 0 0;
+}
+/* Plant silhouette */
+.bw-hero-plant{
+  position:absolute;bottom:32%;right:8%;width:10%;
+  display:flex;flex-direction:column;align-items:center;
+}
+.bw-hero-plant-stem{width:3px;height:40px;background:#1a3050;margin:0 auto}
+.bw-hero-plant-pot{width:18px;height:12px;background:#1a3050;border-radius:0 0 4px 4px}
+.bw-hero-plant-top{width:32px;height:32px;border-radius:50%;background:rgba(30,80,50,.7);margin-bottom:-4px}
+/* Table */
+.bw-hero-table{position:absolute;bottom:26%;left:8%;width:22%;height:6%;background:#1a3050;border-radius:6px 6px 2px 2px}
+/* Rug */
+.bw-hero-rug{position:absolute;bottom:20%;left:20%;right:20%;height:8%;background:linear-gradient(90deg,rgba(200,16,46,.08),rgba(200,16,46,.14),rgba(200,16,46,.08));border-radius:40px}
+/* Ambient dots */
+.bw-hero-dot1,.bw-hero-dot2{position:absolute;border-radius:50%}
+.bw-hero-dot1{width:120px;height:120px;top:-20px;left:-20px;background:radial-gradient(circle,rgba(200,16,46,.08) 0%,transparent 70%)}
+.bw-hero-dot2{width:80px;height:80px;bottom:10%;right:30%;background:radial-gradient(circle,rgba(255,200,100,.06) 0%,transparent 70%)}
+
+.bw-hero-logo-card{position:absolute;top:16px;right:16px;background:#fff;border-radius:14px;padding:14px 18px;box-shadow:0 4px 24px rgba(0,0,0,.28);z-index:10;text-align:center}
+.bw-logo-card-word{font-size:13px;font-weight:900;color:var(--navy);letter-spacing:.06em;line-height:1.3}
+.bw-logo-card-word span{color:var(--red)}
+.bw-logo-card-flag{display:flex;gap:3px;margin:6px 0 0;justify-content:center}
+.bw-logo-flag-bar{height:4px;width:32px;border-radius:2px}
+
+/* ── INFO BAR ── */
+.bw-info-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.bw-info-item{background:#fff;border-radius:14px;padding:16px 18px;border:1px solid var(--border);box-shadow:var(--shadow);display:flex;align-items:center;gap:14px}
+.bw-info-icon{width:42px;height:42px;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.bw-info-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:3px}
+.bw-info-val{font-size:15px;font-weight:800;color:var(--navy);line-height:1.2}
+.bw-info-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.bw-info-val-big{font-size:22px;font-weight:900;color:var(--navy);line-height:1}
+
+/* ── SECTION HEADERS ── */
+.bw-section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;margin-top:8px}
+.bw-section-title{font-size:17px;font-weight:900;color:var(--navy)}
+.bw-section-meta{font-size:12px;color:var(--text3);font-weight:600}
+
+/* ── TIMELINE ── */
+.bw-timeline-card{background:#fff;border-radius:16px;border:1px solid var(--border);padding:24px 24px 20px;margin-bottom:16px;box-shadow:var(--shadow);overflow-x:auto}
+.bw-timeline{display:flex;align-items:flex-start;min-width:580px;position:relative}
+.bw-tl-track{position:absolute;top:14px;left:14px;right:14px;height:3px;background:#e8ecf4;border-radius:2px;z-index:0}
+.bw-tl-fill{position:absolute;top:14px;left:14px;height:3px;background:linear-gradient(90deg,var(--green),#34d399);border-radius:2px;z-index:1;transition:width .7s cubic-bezier(.4,0,.2,1)}
+.bw-tl-step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;z-index:2}
+.bw-tl-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:3px solid #e8ecf4;background:#f4f6fa;color:var(--text3);flex-shrink:0;transition:all .3s}
+.bw-tl-step.done .bw-tl-dot{background:var(--green);border-color:var(--green);color:#fff;font-size:13px}
+.bw-tl-step.current .bw-tl-dot{background:var(--navy);border-color:var(--red);color:#fff;box-shadow:0 0 0 5px rgba(200,16,46,.15);animation:pdot 2.2s ease-in-out infinite}
+@keyframes pdot{0%,100%{box-shadow:0 0 0 5px rgba(200,16,46,.15)}50%{box-shadow:0 0 0 9px rgba(200,16,46,.06)}}
+.bw-tl-label{font-size:9px;font-weight:700;text-align:center;margin-top:8px;color:var(--text3);line-height:1.4;max-width:56px}
+.bw-tl-step.done .bw-tl-label{color:var(--green)}
+.bw-tl-step.current .bw-tl-label{color:var(--navy);font-weight:900;font-size:9.5px}
+
+/* ── STATUS BANNER ── */
+.bw-status-banner{border-radius:14px;padding:16px 20px;margin-bottom:20px;display:flex;gap:14px;align-items:flex-start}
+.bw-status-banner.info{background:#eff6ff;border:1px solid #bfdbfe}
+.bw-status-banner.success{background:#f0fdf4;border:1px solid #bbf7d0}
+.bw-status-banner.amber{background:#fffbeb;border:1px solid #fde68a}
+.bw-status-banner.urgent{background:#fef2f2;border:1px solid #fecaca}
+.bw-status-icon{font-size:22px;flex-shrink:0;margin-top:1px}
+.bw-status-title{font-size:14px;font-weight:800;color:var(--navy);margin-bottom:3px}
+.bw-status-body{font-size:13px;color:var(--text2);line-height:1.65}
+
+/* ── DETAILS GRID ── */
+.bw-details-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.bw-detail-card{background:#fff;border-radius:14px;border:1px solid var(--border);padding:14px 16px;box-shadow:var(--shadow)}
+.bw-detail-icon{font-size:20px;margin-bottom:8px}
+.bw-detail-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:4px}
+.bw-detail-val{font-size:14px;font-weight:800;color:var(--navy);line-height:1.3}
+.bw-detail-sub{font-size:10px;color:var(--text3);margin-top:3px}
+
+/* ── MAP ── */
+.bw-map-wrap{border-radius:16px;overflow:hidden;margin-bottom:24px;border:1px solid var(--border);box-shadow:var(--shadow);height:200px;background:#e8ecf4;position:relative}
+.bw-map-wrap iframe{width:100%;height:100%;border:0;display:block}
+.bw-map-badge{position:absolute;top:12px;left:12px;background:rgba(13,27,62,.88);color:#fff;font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;backdrop-filter:blur(6px);z-index:2;pointer-events:none;display:flex;align-items:center;gap:5px}
+
+/* ── ENTENDIENDO TU PROCESO ── */
+.bw-entendiendo{background:#fff;border-radius:20px;border:1px solid var(--border);padding:28px 28px 24px;margin-bottom:20px;box-shadow:var(--shadow)}
+.bw-ent-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:20px}
+.bw-ent-col-title{font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.bw-ent-body{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px}
+.bw-ent-bullets{list-style:none;margin-bottom:14px}
+.bw-ent-bullets li{font-size:12.5px;color:var(--text2);padding:6px 0;border-bottom:1px solid #f1f5f9;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.bw-ent-bullets li:last-child{border-bottom:none}
+.bw-ent-bullets li::before{content:'○';color:var(--navy);font-size:10px;margin-top:3px;flex-shrink:0}
+.bw-ent-time{background:var(--bg);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--text2);display:flex;align-items:flex-start;gap:8px;border:1px solid var(--border);margin-top:4px}
+.bw-ent-time-icon{flex-shrink:0;font-size:14px;margin-top:1px}
+.bw-ent-right-bullets{list-style:none}
+.bw-ent-right-bullets li{font-size:12.5px;color:var(--text2);padding:7px 0;border-bottom:1px solid #f1f5f9;display:flex;align-items:flex-start;gap:10px;line-height:1.5}
+.bw-ent-right-bullets li:last-child{border-bottom:none}
+.bw-check-circle{width:18px;height:18px;border-radius:50%;background:var(--green-soft);color:var(--green);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.bw-tip-box{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 14px;margin-top:14px;font-size:12px;color:#92400e;line-height:1.6;display:flex;gap:8px;align-items:flex-start}
+.bw-tip-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.bw-ent-section-sub{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:8px;margin-top:14px}
+
+/* ── CONTACT CTA ── */
+.bw-contact{background:#fff;border-radius:16px;border:1px solid var(--border);padding:20px 24px;margin-bottom:16px;box-shadow:var(--shadow);display:flex;align-items:center;gap:16px}
+.bw-contact-icon{font-size:28px;flex-shrink:0}
+.bw-contact-text{flex:1}
+.bw-contact-title{font-size:14px;font-weight:800;color:var(--navy);margin-bottom:3px}
+.bw-contact-sub{font-size:12px;color:var(--text3);line-height:1.5}
+.bw-contact-btn{background:var(--navy);color:#fff;font-size:13px;font-weight:700;padding:12px 20px;border-radius:50px;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:all .2s;border:none;cursor:pointer;flex-shrink:0}
+.bw-contact-btn:hover{background:var(--red)}
+
+/* ── FUTURE SERVICES ── */
+.bw-future{background:linear-gradient(140deg,var(--navy) 0%,#1e3a6e 60%,var(--navy3) 100%);border-radius:20px;padding:28px 28px 24px;margin-bottom:16px;position:relative;overflow:hidden}
+.bw-future::before{content:'';position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(200,16,46,.1);pointer-events:none}
+.bw-future-title{font-size:17px;font-weight:900;color:#fff;margin-bottom:6px;line-height:1.3}
+.bw-future-sub{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:20px;line-height:1.5}
+.bw-future-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px}
+.bw-future-btn{color:#fff;font-size:13px;font-weight:700;padding:11px 20px;border-radius:50px;text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:all .2s;cursor:pointer;border:none}
+.bw-future-btn.ghost{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25)}
+.bw-future-btn.ghost:hover{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.4)}
+.bw-future-btn.solid{background:var(--red);border:1.5px solid var(--red2)}
+.bw-future-btn.solid:hover{background:var(--red2)}
+.bw-future-rule{border:0;border-top:1px solid rgba(255,255,255,.1);margin:0 0 20px}
+.bw-future-deal-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:8px}
+.bw-future-deal-title{font-size:15px;font-weight:900;color:#fff;margin-bottom:10px}
+.bw-future-deal-text{font-size:13px;color:rgba(255,255,255,.65);line-height:1.7;margin-bottom:18px}
+.bw-future-apply{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--navy);font-size:14px;font-weight:800;padding:13px 24px;border-radius:50px;text-decoration:none;transition:all .2s}
+.bw-future-apply:hover{background:#f0f4ff;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.2)}
+
+/* ── FEEDBACK ── */
+.bw-feedback{background:#fff;border-radius:16px;border:1px solid var(--border);padding:22px 24px;box-shadow:var(--shadow)}
+.bw-feedback-title{font-size:15px;font-weight:900;color:var(--navy);margin-bottom:3px}
+.bw-feedback-sub{font-size:12px;color:var(--text3);margin-bottom:16px}
+.star-row{display:flex;gap:6px;margin-bottom:14px}
+.star-btn{font-size:28px;background:none;border:none;cursor:pointer;transition:transform .15s;line-height:1;filter:grayscale(1) opacity(.3)}
+.star-btn.active{filter:none;transform:scale(1.12)}
+.star-btn:hover{transform:scale(1.2);filter:none}
+.feedback-comment{width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:var(--text);outline:none;resize:none;height:70px;margin-bottom:12px;background:var(--bg)}
+.feedback-comment:focus{border-color:var(--navy)}
+.feedback-submit{width:100%;background:var(--navy);color:#fff;border-radius:50px;padding:12px;font-size:14px;font-weight:800;transition:all .2s;border:none;cursor:pointer}
+.feedback-submit:hover{background:var(--red)}
+.feedback-thanks{text-align:center;padding:12px 0}
+.feedback-thanks-icon{font-size:36px;margin-bottom:8px}
+.feedback-thanks-text{font-size:14px;font-weight:700;color:var(--navy)}
+.feedback-thanks-sub{font-size:12px;color:var(--text3);margin-top:4px}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9999}
+#toast.show{opacity:1}
+
+@media(max-width:768px){
+  .stats-row{grid-template-columns:1fr 1fr}
+  .loans-wrap,.filters-bar{padding-left:12px;padding-right:12px}
+  .role-card{width:150px;padding:20px 14px}
+  .bw-hero-card{grid-template-columns:1fr}
+  .bw-hero-right{height:180px}
+  .bw-info-bar{grid-template-columns:1fr}
+  .bw-details-grid{grid-template-columns:1fr 1fr}
+  .bw-ent-grid{grid-template-columns:1fr}
+  .bw-contact{flex-direction:column;text-align:center}
+  .bw-body{padding:16px 14px 40px}
+  .bw-dhl-logo{scale:.9}
+  .bw-logout-btn{display:none}
+}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+
+<!-- ══ LANDING ══════════════════════════════ -->
+<div class="screen active" id="screen-landing">
+  <div class="dhl-wordmark">DISTRICT <span>HOME</span> LOANS</div>
+  <div class="dhl-flag">
+    <div class="dhl-flag-bar" style="width:60px;background:var(--navy)"></div>
+    <div class="dhl-flag-bar" style="width:60px;background:var(--red)"></div>
+    <div class="dhl-flag-bar" style="width:60px;background:var(--navy)"></div>
+  </div>
+  <div class="dhl-tagline">Lending Made EZ®</div>
+  <div class="role-title">Select Your Access</div>
+  <div class="role-cards">
+    <div class="role-card" onclick="openLOPin()">
+      <div class="role-icon">📊</div>
+      <div class="role-name">Loan Officer</div>
+      <div class="role-desc">View your pipeline</div>
+    </div>
+    <div class="role-card ops" onclick="openOpsPin()">
+      <div class="role-icon">⚙️</div>
+      <div class="role-name">Operations</div>
+      <div class="role-desc">Full dashboard & analytics</div>
+    </div>
+    <div class="role-card borrower" onclick="openBorrowerLanding()">
+      <div class="role-icon">🏠</div>
+      <div class="role-name">Borrower</div>
+      <div class="role-desc">Track my loan journey</div>
+    </div>
+  </div>
+  <div class="landing-footer">
+    Questions? <a href="tel:8773430472">877-343-0472</a> · <a href="mailto:hi@districthomeloanss.com">hi@districthomeloanss.com</a>
+  </div>
+</div>
+
+<!-- ══ OPS PIN ══════════════════════════════ -->
+<div class="screen pin-screen-base" id="screen-opspin">
+  <button class="pin-back" onclick="goTo('screen-landing')">&#8592; Back</button>
+  <div class="pin-logo red"><div class="pin-logo-box">DHL</div><div class="pin-logo-text">Operations</div></div>
+  <div class="pin-title">Operations Portal</div>
+  <div class="pin-sub">Enter your Operations PIN to continue</div>
+  <div class="pin-card">
+    <label class="pin-label" for="opspin-input">Operations PIN</label>
+    <input class="pin-input" id="opspin-input" type="password" maxlength="8" placeholder="••••"
+      oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')verifyOpsPin()">
+    <button class="pin-btn red" onclick="verifyOpsPin()">Enter Operations →</button>
+    <div class="pin-error" id="opspin-error"></div>
+    <div class="pin-hint">Contact your administrator if you need access.</div>
+  </div>
+</div>
+
+<!-- ══ LO PIN ═══════════════════════════════ -->
+<div class="screen pin-screen-base" id="screen-lopin">
+  <button class="pin-back" onclick="goTo('screen-landing')">&#8592; Back</button>
+  <div class="pin-logo navy"><div class="pin-logo-box">DHL</div><div class="pin-logo-text">Loan Officer</div></div>
+  <div class="pin-title">LO Portal</div>
+  <div class="pin-sub">Enter your team PIN, then select your name</div>
+  <div class="pin-card">
+    <label class="pin-label" for="lopin-input">Team PIN</label>
+    <input class="pin-input" id="lopin-input" type="password" maxlength="8" placeholder="••••"
+      oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')verifyLOPin()">
+    <button class="pin-btn navy" onclick="verifyLOPin()">Continue →</button>
+    <div class="pin-error" id="lopin-error"></div>
+    <div class="pin-hint">Contact Operations if you need help.</div>
+  </div>
+</div>
+
+<!-- ══ LO NAME SELECTOR ═════════════════════ -->
+<div class="screen pin-screen-base" id="screen-loselect">
+  <button class="pin-back" onclick="goTo('screen-lopin')">&#8592; Back</button>
+  <div class="pin-logo navy"><div class="pin-logo-box">DHL</div><div class="pin-logo-text">Select Your Name</div></div>
+  <div class="pin-title">Who are you?</div>
+  <div class="pin-sub">Select your name to view your pipeline</div>
+  <div class="pin-card" style="max-width:400px">
+    <div class="lo-selector" id="lo-selector">
+      <button class="lo-btn" onclick="selectLO('Joel')">Joel</button>
+      <button class="lo-btn" onclick="selectLO('Edwin')">Edwin</button>
+      <button class="lo-btn" onclick="selectLO('Mario')">Mario</button>
+      <button class="lo-btn" onclick="selectLO('Silvia')">Silvia</button>
+    </div>
+    <button class="pin-btn navy" id="lo-confirm-btn" onclick="confirmLO()" style="opacity:.4;pointer-events:none">View My Pipeline →</button>
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ════════════════════════════ -->
+<div class="screen" id="screen-main">
+  <div class="topbar" id="main-topbar">
+    <button class="tb-back" onclick="goTo('screen-landing')">&#8592;</button>
+    <div class="tb-logo"><div class="tb-logo-box">DHL</div><div class="tb-logo-text">Loan Tracker</div></div>
+    <div class="tb-spacer"></div>
+    <span class="tb-role-badge" id="role-badge">Operations</span>
+    <span class="tb-date" id="tb-date" style="margin-left:12px"></span>
+  </div>
+  <div class="stats-row" id="stats-row"></div>
+  <div class="filters-bar" id="filters-bar">
+    <select class="filter-select" id="filter-lo" onchange="applyFilters()">
+      <option value="">All LOs</option>
+      <option value="Joel">Joel</option>
+      <option value="Edwin">Edwin</option>
+      <option value="Mario">Mario</option>
+      <option value="Silvia">Silvia</option>
+    </select>
+    <select class="filter-select" id="filter-type" onchange="applyFilters()">
+      <option value="">All Types</option>
+      <option value="Purchase">Purchase</option>
+      <option value="Refinance">Refinance</option>
+    </select>
+    <select class="filter-select" id="filter-stage" onchange="applyFilters()">
+      <option value="">All Stages</option>
+    </select>
+    <div class="filters-spacer"></div>
+    <input class="search-input" id="search-input" type="text" placeholder="🔍 Search borrower..." oninput="applyFilters()">
+  </div>
+  <div class="loans-wrap">
+    <table class="loans-table">
+      <thead><tr>
+        <th>LP# · Borrower</th><th>Lender · Type</th><th>Stage</th>
+        <th>LO · Ops</th><th>Closing Date</th><th>Portal</th>
+      </tr></thead>
+      <tbody id="loans-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ BORROWER PIN ══════════════════════════ -->
+<div class="screen pin-screen-base" id="screen-bpin">
+  <button class="pin-back" onclick="goTo('screen-landing')">&#8592; Back</button>
+  <div class="pin-logo navy"><div class="pin-logo-box">DHL</div><div class="pin-logo-text">Borrower Portal</div></div>
+  <div class="pin-title">Track Your Loan</div>
+  <div class="pin-sub">Enter your LP# to see your loan status</div>
+  <div class="pin-card">
+    <label class="pin-label" for="bpin-input">Your Loan Number (LP#)</label>
+    <input class="pin-input" id="bpin-input" type="text" maxlength="6" placeholder="####"
+      oninput="this.value=this.value.replace(/\D/g,'')" onkeydown="if(event.key==='Enter')verifyBPin()">
+    <button class="pin-btn navy" onclick="verifyBPin()">View My Loan →</button>
+    <div class="pin-error" id="bpin-error"></div>
+    <div class="pin-hint">Your loan number was provided by your Loan Officer.<br>Example: 1419, 427, 1473...</div>
+  </div>
+</div>
+
+<!-- ══ BORROWER PORTAL ══════════════════════ -->
+<div class="screen" id="screen-borrower">
+  <div class="bw-topbar">
+    <!-- Logo fiel al sitio de DHL -->
+    <div class="bw-logo">
+      <div class="bw-dhl-logo" onclick="goBackFromBorrower()">
+        <div class="bw-dhl-word1">DISTRICT</div>
+        <div class="bw-dhl-word2">H<span class="dhl-star">★</span>ME</div>
+        <div class="bw-dhl-word3">LOANS</div>
+        <div class="bw-dhl-bars">
+          <div class="bw-dhl-bar" style="width:38px;background:#fff"></div>
+          <div class="bw-dhl-bar" style="width:38px;background:var(--red)"></div>
+          <div class="bw-dhl-bar" style="width:38px;background:#fff"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Language toggle -->
+    <div class="lang-toggle">
+      <span class="lang-globe">🌐</span>
+      <button class="lang-btn active" id="lang-es" onclick="switchLang('es')">ES</button>
+      <span class="lang-sep">|</span>
+      <button class="lang-btn" id="lang-en" onclick="switchLang('en')">EN</button>
+    </div>
+
+    <!-- Back / Home button (prominente) -->
+    <button class="bw-home-btn" id="bw-home-btn" onclick="goBackFromBorrower()">
+      ← <span id="bw-home-text">Inicio</span>
+    </button>
+
+    <!-- Logout -->
+    <button class="bw-logout-btn" id="bw-logout-btn" onclick="goTo('screen-landing')">
+      <span id="bw-logout-text">Cerrar sesión</span>
+    </button>
+  </div>
+  <div class="bw-body" id="bw-body"></div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════
+   DATA
+══════════════════════════════════════════════ */
+const STAGES=['Lead','Pre-Approval','Application','Processing','Submitted UW','Cond. Approval','Clear to Close','Closing','Funded','Closed'];
+const SEMOJI=['📋','✅','📝','⚙️','📨','🟡','🟢','🏠','💰','🎉'];
+
+// Maps internal stage (0-9) to simplified borrower step (0-7)
+const STAGE_TO_BSTEP=[0,1,2,2,3,4,5,6,6,7];
+const B_STAGES_ES=['Solicitud','Pre-aprobación','Documentos','Underwriting','Condiciones','Clear to Close','Cierre','¡Logrado!'];
+const B_STAGES_EN=['Application','Pre-Approval','Documents','Underwriting','Conditions','Clear to Close','Closing','Done!'];
+
+function detectState(a){if(!a)return'';const u=a.toUpperCase();if(u.includes(', VA '))return'VA';if(u.includes(', MD '))return'MD';if(u.includes(', DC '))return'DC';return'';}
+
+const loans=[
+  {id:'1419',borrower:'Carrillo',loanAmount:'—',lender:'Deephaven Lending',loanType:'Refinance',loanProgram:'Conventional',opsCode:'KS',address:'2901 Reed Street, Glenarden, MD 20706',lo:'Joel',stage:0,closingDate:'2026-06-20',stageDate:'2026-05-20'},
+  {id:'427', borrower:'Ramirez',loanAmount:'—',lender:'UWM',loanType:'Purchase',loanProgram:'Conventional',opsCode:'DR',address:'13825 Woodland Heights Drive, Hagerstown, MD 21742',lo:'Joel',stage:6,closingDate:'2026-05-30',stageDate:'2026-05-20'},
+  {id:'1473',borrower:'Arias',loanAmount:'—',lender:'UWM',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',address:'1517 Crest Road, Silver Spring, MD 20902',lo:'Edwin',stage:6,closingDate:'2026-05-28',stageDate:'2026-05-19'},
+  {id:'1466',borrower:'Crespin',loanAmount:'—',lender:'UWM',loanType:'Purchase',loanProgram:'Conventional',opsCode:'DR',address:'6810 Robinia Road, Temple Hills, MD 20748',lo:'Mario',stage:4,closingDate:'2026-06-15',stageDate:'2026-05-18'},
+  {id:'1463',borrower:'Dorcely',loanAmount:'—',lender:'UWM',loanType:'Purchase',loanProgram:'FHA',opsCode:'DR',address:'11122 Oak Leaf Drive Unit 88, Silver Spring, MD 20901',lo:'Silvia',stage:4,closingDate:'2026-06-20',stageDate:'2026-05-17'},
+  {id:'1452',borrower:'Lopez',loanAmount:'—',lender:'Pennymac',loanType:'Refinance',loanProgram:'FHA',opsCode:'DR',address:'1420 Indiana Avenue, Woodbridge, VA 22191',lo:'Mario',stage:4,closingDate:'2026-06-10',stageDate:'2026-05-15'},
+  {id:'1477',borrower:'Montero',loanAmount:'—',lender:'UWM',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',address:'4512 31st Street, Mount Rainier, MD 20712',lo:'Joel',stage:1,closingDate:'2026-07-01',stageDate:'2026-05-20'},
+  {id:'1485',borrower:'Torres',firstName:'Gabriel',loanAmount:'—',lender:'LendingPros',loanType:'Purchase',loanProgram:'Non-QM',opsCode:'DR',address:'19021 Grotto Lane, Germantown, MD 20874',lo:'Edwin',stage:4,closingDate:'2026-06-25',stageDate:'2026-05-19'},
+  {id:'1448',borrower:'Lopez del Aguila',firstName:'Isaac',loanAmount:'—',lender:'HomeXpress Mortgage',loanType:'Refinance',loanProgram:'Non-QM',opsCode:'DR',address:'1516 Opus Avenue, Capitol Heights, MD 20743',lo:'Silvia',stage:2,closingDate:'2026-06-30',stageDate:'2026-05-16'}
+].map(l=>({...l,state:detectState(l.address)}));
+
+/* ══════════════════════════════════════════════
+   PINS & STATE
+══════════════════════════════════════════════ */
+const OPS_PIN='OPS2026';
+const LO_PIN='LO2026';
+let currentRole='ops',currentLO=null,selectedLOName=null;
+let currentBorrowerLoan=null;
+let currentLang='es';
+const feedbackGiven={};
+const selectedStars={};
+
+/* ══════════════════════════════════════════════
+   TRANSLATIONS
+══════════════════════════════════════════════ */
+const T={
+  es:{
+    logout:'Cerrar sesión',
+    greeting:'Hola,',
+    tagline:{
+      Purchase:'Detrás de cada actualización hay personas revisando, coordinando y empujando el proceso para ayudarte a llegar al cierre con mayor claridad y en el menor tiempo posible.',
+      Refinance:'Tu refinanciamiento está en manos de profesionales que trabajan cada día para mejorar tu situación financiera y ayudarte a alcanzar tus metas.',
+      'Non-QM':'Tu préstamo está siendo manejado por especialistas en financiamiento alternativo que entienden tu situación única y trabajan para hacerlo posible.',
+      default:'Detrás de cada actualización hay personas revisando, coordinando y empujando el proceso para ayudarte con claridad y en el menor tiempo posible.'
+    },
+    trust:'Tu confianza es importante para nosotros. Estamos tomando tu caso como si fuera el nuestro.',
+    loanTypeLabel:'Tipo de préstamo',
+    loanTypeMap:{Purchase:'Compra de vivienda',Refinance:'Refinanciamiento','Non-QM':'Préstamo alternativo',FHA:'FHA',Conventional:'Convencional'},
+    yourLO:'Tu Loan Officer',loSub:'Estamos en esto juntos.',
+    estClosing:'Cierre estimado',
+    daysLeft:(d)=>d===0?'¡Hoy!':d===1?'1 día restante':`${d} días restantes`,
+    dayNote:'*Sujeto a cambios',
+    tuProceso:'Tu proceso',
+    cierreEst:'Cierre estimado:',
+    bStages:B_STAGES_ES,
+    detalles:'Detalles de tu préstamo',
+    fechaCierre:'Fecha estimada de cierre',
+    etapaActual:'Etapa actual',
+    step:(s,t)=>`Paso ${s} de ${t}`,
+    processor:'Processor',opsTeam:'Operations Team',loanOfficer:'Loan Officer',
+    ubicacion:'Ubicación de la propiedad',
+    entendiendo:'Entendiendo tu proceso',
+    necesitasAyuda:'¿Necesitas ayuda?',
+    contactSub:'Si tienes dudas sobre tu préstamo, contáctanos. Estamos para servirte.',
+    contactBtn:'Contactar a mi equipo',
+    homeBtn:'Inicio',
+    homeBtnLO:'← Pipeline',
+    futureTitle:'¿Pensando en refinanciar o comprar otra propiedad?',
+    futureSub:'District Home Loans está aquí para acompañarte en cada paso de tu camino financiero.',
+    futureBuyBtn:'🏠 Comprar una casa',
+    futureRefiBtn:'🔄 Refinanciar',
+    futureDealLabel:'Cuando estés listo',
+    futureDealTitle:'Déjanos conseguirte el mejor trato.',
+    futureDealText:'Comprar una casa es más que tasas de interés. Necesitas profesionales hipotecarios que te den su mejor esfuerzo — siempre. Ya sea que seas comprador por primera vez o quieras refinanciar un préstamo existente, nuestro equipo de Asesores Hipotecarios está listo para ayudarte.',
+    futureApplyBtn:'Aplicar aquí →',
+    feedbackTitle:'¿Cómo ha sido tu experiencia?',
+    feedbackSub:'Tu opinión nos ayuda a mejorar · Toma 30 segundos',
+    feedbackPlaceholder:'Opcional: Cuéntanos sobre tu experiencia...',
+    feedbackSubmit:'Enviar comentarios',
+    feedbackThanks:'¡Gracias por tu opinión!',
+    feedbackThanksub:'Tu respuesta ha sido registrada.',
+    dateLocale:'es-MX',
+    dateOptions:{month:'long',day:'numeric',year:'numeric'},
+    stageNames:['Recibido','Pre-aprobación','Aplicación','En proceso','Underwriting','Aprobación condicional','Clear to Close','Cierre','Fondeado','Cerrado'],
+    pastDate:'Por confirmar',noDate:'Por confirmar',
+    statusTypes:{info:'ℹ️',success:'🎉',amber:'⏳',urgent:'⚠️'}
+  },
+  en:{
+    logout:'Log out',
+    greeting:'Hello,',
+    tagline:{
+      Purchase:'Behind every update, there are people reviewing, coordinating, and pushing the process forward to help you reach closing with clarity and confidence.',
+      Refinance:'Your refinance is in the hands of professionals working every day to improve your financial situation and help you reach your goals.',
+      'Non-QM':'Your loan is being handled by alternative financing specialists who understand your unique situation and are committed to making it happen.',
+      default:'Behind every update, there are people reviewing, coordinating, and pushing the process forward to help you with clarity and speed.'
+    },
+    trust:'Your trust matters to us. We treat every case like it were our own.',
+    loanTypeLabel:'Loan Type',
+    loanTypeMap:{Purchase:'Purchase',Refinance:'Refinance','Non-QM':'Non-QM Loan',FHA:'FHA',Conventional:'Conventional'},
+    yourLO:'Your Loan Officer',loSub:"We're in this together.",
+    estClosing:'Est. Closing',
+    daysLeft:(d)=>d===0?'Today!':d===1?'1 day left':`${d} days left`,
+    dayNote:'*Subject to change',
+    tuProceso:'Your Progress',
+    cierreEst:'Est. Closing:',
+    bStages:B_STAGES_EN,
+    detalles:'Loan Details',
+    fechaCierre:'Estimated Closing Date',
+    etapaActual:'Current Stage',
+    step:(s,t)=>`Step ${s} of ${t}`,
+    processor:'Processor',opsTeam:'Operations Team',loanOfficer:'Loan Officer',
+    ubicacion:'Property Location',
+    entendiendo:'Understanding Your Process',
+    necesitasAyuda:'Need Help?',
+    contactSub:"If you have questions about your loan, contact us. We're here to help.",
+    contactBtn:'Contact My Team',
+    homeBtn:'Home',
+    homeBtnLO:'← Pipeline',
+    futureTitle:'Looking to refinance or purchase another property?',
+    futureSub:'District Home Loans is here to support every step of your financial journey.',
+    futureBuyBtn:'🏠 Buy a Home',
+    futureRefiBtn:'🔄 Refinance',
+    futureDealLabel:'When you\'re ready',
+    futureDealTitle:'Let us get you the best deal.',
+    futureDealText:'Buying a home is about more than interest rates. You need knowledgeable mortgage professionals who give you their best — consistently. Whether you\'re a first-time home buyer or looking to refinance an existing loan, our professionally trained staff of Mortgage Advisors is ready to help.',
+    futureApplyBtn:'Apply here →',
+    feedbackTitle:'How has your experience been?',
+    feedbackSub:'Your feedback helps us improve · Takes 30 seconds',
+    feedbackPlaceholder:'Optional: Tell us about your experience...',
+    feedbackSubmit:'Submit Feedback',
+    feedbackThanks:'Thank you for your feedback!',
+    feedbackThanksub:'Your response has been recorded.',
+    dateLocale:'en-US',
+    dateOptions:{month:'long',day:'numeric',year:'numeric'},
+    stageNames:['Received','Pre-Approval','Application','Processing','Underwriting','Conditional Approval','Clear to Close','Closing','Funded','Closed'],
+    pastDate:'To be confirmed',noDate:'To be confirmed',
+    statusTypes:{info:'ℹ️',success:'🎉',amber:'⏳',urgent:'⚠️'}
+  }
+};
+
+/* ══════════════════════════════════════════════
+   STAGE CONTENT — Dynamic "Entendiendo" section
+══════════════════════════════════════════════ */
+function getStageContent(stage, loanType, lang){
+  const isRefi = loanType==='Refinance';
+  const isNonQM = loanType==='Non-QM';
+  const isPurchase = loanType==='Purchase';
+
+  const c = {
+    es:{
+      0:{
+        leftTitle:'¿Qué está pasando ahora?',icon:'🔍',
+        leftBody:'Nuestro equipo ha recibido tu información y está iniciando la revisión de tu caso. Muy pronto un especialista se comunicará contigo.',
+        leftBullets:['Estamos verificando tus datos de contacto e información básica.','Se asignará un Loan Officer dedicado a tu caso.',isRefi?'Revisaremos los detalles de tu préstamo actual.':'Te ayudaremos a entender el proceso de compra desde el inicio.'],
+        timeTip:null,
+        rightTitle:'¿Qué puedes hacer mientras tanto?',
+        rightBullets:['Ten a la mano tu identificación (pasaporte, ID o licencia de conducir).','Prepara los últimos 2 años de declaraciones de impuestos y tus 2 talonarios de pago más recientes.','Responde rápidamente si tu Loan Officer se comunica contigo — cada día cuenta.'],
+        tip:null
+      },
+      1:{
+        leftTitle:'¿Qué significa la pre-aprobación?',icon:'✅',
+        leftBody:isRefi?'Estamos analizando tu situación financiera actual para determinar las mejores opciones de refinanciamiento disponibles para ti.':'Estamos analizando tu perfil financiero para determinar cuánto puedes calificar y qué programa de préstamo es el mejor para tu situación.',
+        leftBullets:['Revisamos tu historial de crédito y puntaje.','Analizamos tus ingresos verificables y activos.',isRefi?'Evaluamos el equity disponible en tu propiedad actual.':'Determinamos tu capacidad máxima de compra.'],
+        timeTip:'Tiempo típico: 24 a 48 horas hábiles',
+        rightTitle:'¿Qué puedes esperar?',
+        rightBullets:[isRefi?'Una llamada o comunicación con las opciones de refinanciamiento disponibles.':'Una carta de pre-aprobación con el monto estimado para el que calificas.','Podemos pedirte documentos adicionales si es necesario.','No te preocupes si tienes preguntas — estamos disponibles para explicarte todo.'],
+        tip:'Evita abrir nuevas líneas de crédito o hacer compras grandes mientras dure este proceso. Puede afectar tu calificación.'
+      },
+      2:{
+        leftTitle:'Tu aplicación ya está en proceso',icon:'📝',
+        leftBody:'Tu solicitud ha sido completada y pasó a manos del equipo de procesamiento. Ellos revisarán cada documento para asegurarse de que todo esté completo y en orden antes de enviarlo al underwriter.',
+        leftBullets:['Verificación de todos tus documentos de ingresos y activos.',isRefi?'Revisión del título de propiedad y detalles del préstamo actual.':'Inicio de la búsqueda de título de la propiedad.','Posiblemente se ordenará la tasación (appraisal) pronto.'],
+        timeTip:'Tiempo típico: 3 a 5 días hábiles',
+        rightTitle:'¿Qué puedes esperar?',
+        rightBullets:['Tu procesador puede contactarte para pedir documentos adicionales.','Responde rápido — cada día cuenta para cumplir tu fecha de cierre.','Si te piden algo, es completamente normal. No significa que haya un problema.'],
+        tip:'No cambies de trabajo, no abras cuentas nuevas y evita depósitos grandes e inusuales en tu cuenta bancaria sin documentar su origen.'
+      },
+      3:{
+        leftTitle:'Tu préstamo está en procesamiento',icon:'⚙️',
+        leftBody:'El equipo de procesamiento está organizando y verificando toda tu documentación de forma detallada. Esta etapa es fundamental para preparar un expediente sólido antes de enviarlo al underwriter.',
+        leftBullets:['Verificación de historial laboral, ingresos y activos en detalle.',isRefi?'Revisión del título actual y coordinación del payoff statement.':'Coordinación y seguimiento de la tasación (appraisal) de la propiedad.','Organización de todos los documentos requeridos por el prestamista.'],
+        timeTip:'Tiempo típico: 1 a 2 semanas',
+        rightTitle:'¿Qué puedes esperar?',
+        rightBullets:['Un tasador puede contactarte para coordinar el acceso a la propiedad.','Tu procesador puede solicitar documentos o aclaraciones adicionales.','Mantén tu celular disponible — la comunicación rápida en esta etapa es clave.'],
+        tip:'Evita hacer pagos adicionales o grandes a deudas sin consultar primero con tu Loan Officer. Algunos movimientos bancarios requieren explicación documentada.'
+      },
+      4:{
+        leftTitle:'¿Qué significa estar "En revisión (Underwriting)"?',icon:'🔎',
+        leftBody:'El underwriter es un analista independiente que revisa toda tu información para verificar que cumples con los requisitos del programa de préstamo. Es una parte estándar y necesaria de todo proceso hipotecario.',
+        leftBullets:['Revisan tus ingresos, activos, historial de crédito y la propiedad.','Pueden hacer preguntas o solicitar aclaraciones adicionales — es normal.','Este proceso puede tomar varios días; no significa que haya un problema.'],
+        timeTip:`Tiempo típico: 3 a 7 días hábiles${isNonQM?' (los préstamos Non-QM pueden tomar algunos días adicionales)':''}`,
+        rightTitle:'¿Qué puedes hacer ahora?',
+        rightBullets:['No necesitas hacer nada en este momento, a menos que te contactemos.','Te notificaremos inmediatamente cuando haya un cambio o decisión.','Nuestro equipo está coordinando activamente para avanzar tu expediente.'],
+        tip:'Evita abrir cuentas nuevas, hacer compras grandes a crédito o cambiar de empleo hasta después del cierre. Cualquier cambio puede retrasar el proceso.'
+      },
+      5:{
+        leftTitle:'¿Qué significa "Aprobación Condicional"?',icon:'🟡',
+        leftBody:'¡Buenas noticias! Tu préstamo fue aprobado. "Condicional" significa que el underwriter necesita algunos elementos adicionales específicos antes de emitir la aprobación final. Es una etapa completamente normal.',
+        leftBullets:['Las condiciones son documentos o aclaraciones concretas que el underwriter necesita revisar.',isRefi?'En refinanciamientos pueden incluir verificaciones del título o historial de pagos.':'En compras pueden incluir documentos de la propiedad, HOA o el contrato de compraventa.','Una vez cumplidas, pasas a Clear to Close.'],
+        timeTip:'Depende de qué tan rápido se cumplan y envíen las condiciones a tu equipo.',
+        rightTitle:'¿Qué debes hacer?',
+        rightBullets:['Responde lo antes posible a cualquier solicitud de tu equipo.','Las condiciones no son señal de problemas — casi todos los préstamos pasan por esta etapa.','Tu velocidad de respuesta puede determinar si cierras en la fecha programada.'],
+        tip:'Prioriza las solicitudes de documentos de tu equipo. Cada hora que demores puede traducirse en un día de retraso en tu cierre.'
+      },
+      6:{
+        leftTitle:'¿Qué significa "Clear to Close"?',icon:'🟢',
+        leftBody:'"Clear to Close" es la aprobación final del underwriter. Todas las condiciones han sido cumplidas y tu préstamo está listo para cerrar. Este es uno de los momentos más importantes de todo el proceso.',
+        leftBullets:['Tu Closing Disclosure (CD) será preparada — léela con cuidado línea por línea.',isRefi?'Se coordinará una fecha de firma con el notario o compañía de título.':'Coordina la fecha y hora de cierre con la compañía de título y tu agente de bienes raíces.','Por ley, tienes derecho a recibir la CD al menos 3 días antes del cierre.'],
+        timeTip:'Tu cierre debería ocurrir dentro de los próximos 3 a 7 días hábiles.',
+        rightTitle:'Prepárate para el cierre',
+        rightBullets:[isRefi?'En refinanciamientos generalmente firmas en casa o en una notaría. En la mayoría de casos no necesitas traer fondos grandes.':'Lleva una identificación válida y el pago de costos de cierre en cheque de caja (cashier\'s check) o transferencia wire.','Revisa la Closing Disclosure con tu Loan Officer si tienes dudas.','¡Estás a días de lograrlo!'],
+        tip:null
+      },
+      7:{
+        leftTitle:'Tu cierre está programado',icon:'🏠',
+        leftBody:'¡Ya casi! Tienes una fecha asignada para tu cierre. Este es el momento en que firmarás todos los documentos finales y se completará la transacción.',
+        leftBullets:['Revisa tu Closing Disclosure en detalle antes de llegar a la cita.',isRefi?'Ten en cuenta que en refinanciamientos hay un período de rescisión de 3 días después de firmar.':'Si es compra, coordina la entrega de llaves con tu agente de bienes raíces.','Lleva tu identificación válida y todos los documentos que te hayan solicitado.'],
+        timeTip:null,
+        rightTitle:'El día del cierre',
+        rightBullets:['Llega puntual a tu cita de firma.',isRefi?'Después del período de rescisión, el préstamo se fondea y tu nueva tasa entra en vigor.':'Una vez que firmes y el prestamista libere los fondos, recibirás las llaves de tu nueva propiedad.','¡Felicidades, ya casi lo lograste!'],
+        tip:null
+      },
+      8:{
+        leftTitle:'Tu préstamo fue fondeado',icon:'💰',
+        leftBody:isRefi?'¡Lo lograste! Tu refinanciamiento está completo. El prestamista ha liberado los fondos y tu nueva tasa y pago mensual entrarán en efecto en el próximo ciclo de facturación.':'¡Lo lograste! El prestamista ha liberado los fondos hacia la compañía de título para completar la compra de tu propiedad.',
+        leftBullets:['El préstamo será registrado oficialmente con el condado — puede tomar 1 a 3 días adicionales.',isRefi?'Recibirás información sobre cuándo y cómo realizar tu primer pago del nuevo préstamo.':'Recibirás la información del servicer (a quién hacerle tus pagos) dentro de los próximos 30 días.','Guarda todos los documentos del cierre en un lugar seguro.'],
+        timeTip:null,
+        rightTitle:'Próximos pasos',
+        rightBullets:[isRefi?'Espera tu primer estado de cuenta con los detalles del nuevo préstamo.':'Configura el pago automático con tu nuevo servicer para evitar pagos tardíos.','Si tienes preguntas sobre tu nuevo préstamo, estamos disponibles para apoyarte.','¡Gracias por confiar en District Home Loans para este momento tan importante!'],
+        tip:null
+      },
+      9:{
+        leftTitle:isRefi?'Tu refinanciamiento está completo':'¡Bienvenido a tu nuevo hogar!',icon:'🎉',
+        leftBody:isRefi?'Tu refinanciamiento ha sido completado exitosamente. Gracias por confiar en District Home Loans para esta decisión financiera tan importante para tu familia.':'¡Felicidades! Has completado exitosamente el proceso de compra de tu hogar. Ha sido un honor acompañarte en este camino.',
+        leftBullets:['Conserva tu Closing Disclosure y todos los documentos del cierre en un lugar seguro.',isRefi?'Recuerda la fecha de vencimiento de tu primer pago del nuevo préstamo.':'Actualiza tu dirección con el correo postal y tus instituciones financieras importantes.','Si tienes preguntas en el futuro, no dudes en contactarnos.'],
+        timeTip:null,
+        rightTitle:'Siempre estamos aquí',
+        rightBullets:['Para referidos de amigos y familiares que necesiten un préstamo.','Si en el futuro deseas vender o refinanciar de nuevo.','Para cualquier pregunta sobre tu préstamo actual o futuras necesidades financieras.'],
+        tip:null
+      }
+    },
+    en:{
+      0:{
+        leftTitle:"What's happening right now?",icon:'🔍',
+        leftBody:"Our team has received your information and is beginning the review of your case. A specialist will reach out to you very shortly.",
+        leftBullets:['We are verifying your contact information and basic details.','A dedicated Loan Officer is being assigned to your case.',isRefi?'We will review the details of your current loan.':'We will help you understand the home buying process from the start.'],
+        timeTip:null,
+        rightTitle:'What can you do in the meantime?',
+        rightBullets:['Have your ID ready (passport, state ID, or driver\'s license).','Prepare your last 2 years of tax returns and your 2 most recent pay stubs.','Respond quickly if your Loan Officer reaches out — every day matters.'],
+        tip:null
+      },
+      1:{
+        leftTitle:'What does pre-approval mean?',icon:'✅',
+        leftBody:isRefi?'We are analyzing your current financial situation to determine the best refinancing options available to you.':'We are analyzing your financial profile to determine how much you qualify for and which loan program best fits your situation.',
+        leftBullets:['We review your credit history and score.','We analyze your verifiable income and assets.',isRefi?'We evaluate the available equity in your current property.':'We determine your maximum purchasing power.'],
+        timeTip:'Typical time: 24 to 48 business hours',
+        rightTitle:'What can you expect?',
+        rightBullets:[isRefi?'A call or message with your available refinancing options.':'A pre-approval letter with the estimated loan amount you qualify for.','We may request additional documents if needed.','Don\'t worry if you have questions — we are available to explain everything.'],
+        tip:'Avoid opening new credit lines or making large purchases while this process is ongoing. It may affect your qualification.'
+      },
+      2:{
+        leftTitle:'Your application is now in process',icon:'📝',
+        leftBody:'Your application has been completed and handed off to the processing team. They will review every document to make sure everything is complete and in order before sending it to the underwriter.',
+        leftBullets:['Verification of all income and asset documents.',isRefi?'Review of property title and current loan details.':'Initiation of the property title search.','An appraisal may be ordered soon.'],
+        timeTip:'Typical time: 3 to 5 business days',
+        rightTitle:'What can you expect?',
+        rightBullets:['Your processor may contact you to request additional documents.','Respond quickly — every day counts toward your closing date.','If something is requested, it is completely normal. It does not mean there is a problem.'],
+        tip:"Don't change jobs, don't open new accounts, and avoid large unusual deposits in your bank account without documenting their source."
+      },
+      3:{
+        leftTitle:'Your loan is in processing',icon:'⚙️',
+        leftBody:'The processing team is carefully organizing and verifying all your documentation. This stage is critical to building a solid file before it is submitted to the underwriter.',
+        leftBullets:['Detailed verification of employment history, income, and assets.',isRefi?'Review of current title and coordination of payoff statement.':'Coordination and follow-up on the property appraisal.','Organization of all documents required by the lender.'],
+        timeTip:'Typical time: 1 to 2 weeks',
+        rightTitle:'What can you expect?',
+        rightBullets:['An appraiser may contact you to coordinate property access.','Your processor may request additional documents or clarifications.','Keep your phone available — quick communication at this stage is essential.'],
+        tip:'Avoid making extra payments on debts without consulting your Loan Officer first. Some bank transactions may require written explanation.'
+      },
+      4:{
+        leftTitle:'What does "Under Review (Underwriting)" mean?',icon:'🔎',
+        leftBody:'The underwriter is an independent analyst who reviews your entire file to verify that you meet the loan program requirements. This is a standard and necessary part of every mortgage process.',
+        leftBullets:['They review your income, assets, credit history, and the property.','They may ask questions or request additional clarifications — this is normal.','This process can take several days; it does not mean there is a problem.'],
+        timeTip:`Typical time: 3 to 7 business days${isNonQM?' (Non-QM loans may take a few additional days)':''}`,
+        rightTitle:'What can you do right now?',
+        rightBullets:["You don't need to do anything at this time, unless we contact you.",'We will notify you immediately when there is a change or a decision.','Our team is actively coordinating to move your file forward.'],
+        tip:'Avoid opening new accounts, making large credit purchases, or changing jobs until after closing. Any change can delay the process.'
+      },
+      5:{
+        leftTitle:'What does "Conditional Approval" mean?',icon:'🟡',
+        leftBody:'Great news! Your loan has been approved. "Conditional" means the underwriter needs a few additional specific items before issuing final approval. This is a completely normal stage.',
+        leftBullets:['Conditions are specific documents or clarifications the underwriter needs to review.',isRefi?'In refinances, they may include title verifications or payment history.':'In purchases, they may include property documents, HOA info, or the purchase contract.','Once met, you move to Clear to Close.'],
+        timeTip:'Depends on how quickly the conditions are met and submitted to your team.',
+        rightTitle:'What should you do?',
+        rightBullets:['Respond as quickly as possible to any requests from your team.','Conditions are not a sign of problems — almost all loans go through this stage.','Your response speed can determine whether you close on your scheduled date.'],
+        tip:'Prioritize document requests from your team. Every hour of delay can translate into a day of delay in your closing.'
+      },
+      6:{
+        leftTitle:'What does "Clear to Close" mean?',icon:'🟢',
+        leftBody:'"Clear to Close" is the underwriter\'s final approval. All conditions have been met and your loan is ready to close. This is one of the most important moments in the entire process.',
+        leftBullets:['Your Closing Disclosure (CD) will be prepared — read it carefully line by line.',isRefi?'A signing date will be coordinated with the notary or title company.':'Coordinate the closing date and time with the title company and your real estate agent.','By law, you have the right to receive the CD at least 3 days before closing.'],
+        timeTip:'Your closing should occur within the next 3 to 7 business days.',
+        rightTitle:'Prepare for closing',
+        rightBullets:[isRefi?'In refinances, you typically sign at home or at a notary. In most cases you do not need to bring large funds.':'Bring a valid ID and closing costs via cashier\'s check or wire transfer.','Review the Closing Disclosure with your Loan Officer if you have any questions.','You are days away from achieving this!'],
+        tip:null
+      },
+      7:{
+        leftTitle:'Your closing is scheduled',icon:'🏠',
+        leftBody:"Almost there! You have an assigned closing date. This is when you will sign all final documents and the transaction will be completed.",
+        leftBullets:['Review your Closing Disclosure in detail before your appointment.',isRefi?'Keep in mind that refinances have a 3-day rescission period after signing.':'If it\'s a purchase, coordinate key delivery with your real estate agent.','Bring your valid ID and any documents you have been asked for.'],
+        timeTip:null,
+        rightTitle:'Closing day',
+        rightBullets:['Arrive on time to your signing appointment.',isRefi?'After the rescission period, the loan funds and your new rate takes effect.':'Once you sign and the lender releases funds, you will receive the keys to your new property.','Congratulations, you are almost there!'],
+        tip:null
+      },
+      8:{
+        leftTitle:'Your loan has been funded',icon:'💰',
+        leftBody:isRefi?'You did it! Your refinance is complete. The lender has released the funds and your new rate and monthly payment will take effect in the next billing cycle.':'You did it! The lender has released the funds to the title company to complete the purchase of your property.',
+        leftBullets:['The loan will be officially recorded with the county — this can take 1 to 3 additional days.',isRefi?'You will receive information about when and how to make your first payment on the new loan.':'You will receive servicer information (who to make your payments to) within the next 30 days.','Keep all closing documents in a safe place.'],
+        timeTip:null,
+        rightTitle:'Next steps',
+        rightBullets:[isRefi?'Wait for your first statement with your new loan details.':'Set up auto-pay with your new servicer to avoid late payments.','If you have questions about your new loan, we are available to support you.','Thank you for trusting District Home Loans for this important moment!'],
+        tip:null
+      },
+      9:{
+        leftTitle:isRefi?'Your refinance is complete':'Welcome to your new home!',icon:'🎉',
+        leftBody:isRefi?'Your refinance has been completed successfully. Thank you for trusting District Home Loans for this important financial decision.':'Congratulations! You have successfully completed the home buying process. It has been an honor to accompany you on this journey.',
+        leftBullets:['Keep your Closing Disclosure and all closing documents in a safe place.',isRefi?'Remember the due date of your first payment on the new loan.':'Update your address with the post office and your important financial institutions.','If you have questions in the future, do not hesitate to contact us.'],
+        timeTip:null,
+        rightTitle:"We're always here",
+        rightBullets:['For referrals of friends and family who need a loan.','If you ever want to sell or refinance again in the future.','For any questions about your current loan or future financial needs.'],
+        tip:null
+      }
+    }
+  };
+  return c[lang]?.[stage]||c[lang]?.[0];
+}
+
+/* ══════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════ */
+function goTo(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
+function goBackFromBorrower(){if(currentRole==='lo'||currentRole==='ops')goTo('screen-main');else goTo('screen-landing')}
+
+/* ══════════════════════════════════════════════
+   PINS
+══════════════════════════════════════════════ */
+function openOpsPin(){document.getElementById('opspin-input').value='';document.getElementById('opspin-error').textContent='';goTo('screen-opspin')}
+function verifyOpsPin(){
+  const pin=document.getElementById('opspin-input').value.trim().toUpperCase();
+  const err=document.getElementById('opspin-error');
+  if(!pin){err.textContent='Please enter your PIN';return}
+  if(pin===OPS_PIN){currentRole='ops';currentLO=null;err.textContent='';loadDashboard()}
+  else{err.textContent='Invalid PIN. Try again.';document.getElementById('opspin-input').value=''}
+}
+function openLOPin(){document.getElementById('lopin-input').value='';document.getElementById('lopin-error').textContent='';goTo('screen-lopin')}
+function verifyLOPin(){
+  const pin=document.getElementById('lopin-input').value.trim().toUpperCase();
+  const err=document.getElementById('lopin-error');
+  if(!pin){err.textContent='Please enter your PIN';return}
+  if(pin===LO_PIN){err.textContent='';resetLOSelector();goTo('screen-loselect')}
+  else{err.textContent='Invalid PIN. Try again.';document.getElementById('lopin-input').value=''}
+}
+function resetLOSelector(){selectedLOName=null;document.querySelectorAll('.lo-btn').forEach(b=>b.classList.remove('selected'));const btn=document.getElementById('lo-confirm-btn');btn.style.opacity='.4';btn.style.pointerEvents='none'}
+function selectLO(name){selectedLOName=name;document.querySelectorAll('.lo-btn').forEach(b=>b.classList.toggle('selected',b.textContent===name));const btn=document.getElementById('lo-confirm-btn');btn.style.opacity='1';btn.style.pointerEvents='auto'}
+function confirmLO(){if(!selectedLOName)return;currentRole='lo';currentLO=selectedLOName;loadDashboard()}
+function openBorrowerLanding(){document.getElementById('bpin-input').value='';document.getElementById('bpin-error').textContent='';goTo('screen-bpin')}
+function verifyBPin(){
+  const pin=document.getElementById('bpin-input').value.trim();
+  const err=document.getElementById('bpin-error');
+  if(!pin){err.textContent='Please enter your LP#';return}
+  const loan=loans.find(l=>l.id===pin||l.id===String(parseInt(pin)));
+  if(loan){err.textContent='';currentRole='borrower';currentLang='es';document.getElementById('lang-es').classList.add('active');document.getElementById('lang-en').classList.remove('active');renderBorrowerPortal(loan);goTo('screen-borrower')}
+  else{err.textContent='Loan not found. Check your LP# and try again.';document.getElementById('bpin-input').value=''}
+}
+function openBorrowerFromDashboard(loanId){
+  const loan=loans.find(l=>l.id===loanId);
+  if(loan){renderBorrowerPortal(loan);goTo('screen-borrower')}
+}
+
+/* ══════════════════════════════════════════════
+   LANGUAGE
+══════════════════════════════════════════════ */
+function switchLang(lang){
+  currentLang=lang;
+  document.getElementById('lang-es').classList.toggle('active',lang==='es');
+  document.getElementById('lang-en').classList.toggle('active',lang==='en');
+  document.documentElement.lang=lang;
+  if(currentBorrowerLoan)renderBorrowerPortal(currentBorrowerLoan);
+}
+
+/* ══════════════════════════════════════════════
+   DASHBOARD
+══════════════════════════════════════════════ */
+function loadDashboard(){
+  const isOps=currentRole==='ops';
+  document.getElementById('role-badge').textContent=isOps?'Operations':`LO: ${currentLO||'All'}`;
+  document.getElementById('main-topbar').className=isOps?'topbar red-bar':'topbar';
+  document.getElementById('tb-date').textContent=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  const loFilter=document.getElementById('filter-lo');
+  loFilter.style.display='';
+  if(!isOps&&currentLO){loFilter.value=currentLO;loFilter.disabled=true;loFilter.style.opacity='.6'}
+  else{loFilter.disabled=false;loFilter.style.opacity='1';loFilter.value=''}
+  populateStageFilter();renderStats();applyFilters();goTo('screen-main');
+}
+function renderStats(){
+  const base=currentLO?loans.filter(l=>l.lo===currentLO):loans;
+  const today=new Date();
+  const urgent=base.filter(l=>{if(!l.closingDate)return false;const diff=(new Date(l.closingDate)-today)/86400000;return diff>=0&&diff<=7}).length;
+  document.getElementById('stats-row').innerHTML=`
+    <div class="stat-card"><div class="stat-label">Total Pipeline</div><div class="stat-value">${base.length}</div><div class="stat-sub">Active loans</div></div>
+    <div class="stat-card"><div class="stat-label">In Process</div><div class="stat-value">${base.filter(l=>l.stage>=1&&l.stage<=5).length}</div><div class="stat-sub">Pre-approval → UW</div></div>
+    <div class="stat-card"><div class="stat-label">Clear to Close</div><div class="stat-value" style="color:var(--green)">${base.filter(l=>l.stage===6).length}</div><div class="stat-sub">Ready to close</div></div>
+    <div class="stat-card"><div class="stat-label">Closing ≤7 days</div><div class="stat-value" style="color:var(--alert)">${urgent}</div><div class="stat-sub">Urgent attention</div></div>`;
+}
+function populateStageFilter(){
+  const sel=document.getElementById('filter-stage');
+  sel.innerHTML='<option value="">All Stages</option>';
+  STAGES.forEach((l,i)=>{const o=document.createElement('option');o.value=i;o.textContent=`${i} – ${l}`;sel.appendChild(o)});
+}
+function applyFilters(){
+  const lo=document.getElementById('filter-lo').value||currentLO;
+  const type=document.getElementById('filter-type').value;
+  const stage=document.getElementById('filter-stage').value;
+  const q=document.getElementById('search-input').value.toLowerCase().trim();
+  renderLoans(loans.filter(l=>{
+    if(lo&&l.lo!==lo)return false;
+    if(type&&l.loanType!==type)return false;
+    if(stage!==''&&l.stage!==parseInt(stage))return false;
+    if(q&&!l.borrower.toLowerCase().includes(q)&&!l.id.includes(q)&&!(l.firstName||'').toLowerCase().includes(q))return false;
+    return true;
+  }));
+}
+function renderLoans(list){
+  const tbody=document.getElementById('loans-tbody');
+  if(!list.length){tbody.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text3)">No loans match your filters</td></tr>`;return}
+  const today=new Date();
+  tbody.innerHTML=list.map(l=>{
+    const tc=l.loanType==='Purchase'?'type-purchase':'type-refi';
+    const cd=l.closingDate?new Date(l.closingDate):null;
+    const days=cd?Math.ceil((cd-today)/86400000):null;
+    const urg=days!==null&&days<=7&&days>=0;
+    const cdStr=cd?`${cd.toLocaleDateString('en-US',{month:'short',day:'numeric'})}${urg?` ⚠️ ${days}d`:''}` :'—';
+    return `<tr class="loan-row" onclick="openBorrowerFromDashboard('${l.id}')">
+      <td><div class="loan-id">LP# ${l.id}</div><div class="loan-borrower" style="margin-top:4px">${l.firstName||l.borrower}</div><div class="loan-address">${l.address}</div></td>
+      <td><div class="loan-lender">${l.lender}</div><div style="margin-top:4px"><span class="loan-type-badge ${tc}">${l.loanType}</span>${l.loanProgram?`<span style="font-size:10px;color:var(--text3);margin-left:4px">${l.loanProgram}</span>`:''}</div></td>
+      <td><div class="stage-pill s${l.stage}">${SEMOJI[l.stage]} ${STAGES[l.stage]}</div><div style="font-size:10px;color:var(--text3);margin-top:3px">Stage ${l.stage} of 9</div></td>
+      <td><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="lo-badge">${l.lo}</span><span class="ops-badge">${l.opsCode}</span></div>${l.state?`<div style="font-size:10px;color:var(--text3);margin-top:3px">${l.state}</div>`:''}</td>
+      <td><span class="${urg?'cd-urgent':'cd-date'}">${cdStr}</span></td>
+      <td><button class="btn-view" onclick="event.stopPropagation();openBorrowerFromDashboard('${l.id}')">View →</button></td>
+    </tr>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════════════════
+   BORROWER PORTAL RENDERER
+══════════════════════════════════════════════ */
+function renderBorrowerPortal(loan){
+  currentBorrowerLoan=loan;
+  const t=T[currentLang];
+  const today=new Date();
+  const cd=loan.closingDate?new Date(loan.closingDate):null;
+  const days=cd?Math.ceil((cd-today)/86400000):null;
+  const isUrgent=days!==null&&days>=0&&days<=7;
+  const isPast=days!==null&&days<0;
+
+  /* Topbar: mostrar botones según rol */
+  document.getElementById('bw-logout-text').textContent=t.logout;
+  const isInsideDashboard = currentRole==='lo'||currentRole==='ops';
+  const homeBtn = document.getElementById('bw-home-btn');
+  const logoutBtn = document.getElementById('bw-logout-btn');
+  if(isInsideDashboard){
+    // LO / Ops: botón Pipeline visible, Cerrar sesión discreto
+    homeBtn.style.display='flex';
+    document.getElementById('bw-home-text').textContent='Pipeline';
+    logoutBtn.style.display='flex';
+  } else {
+    // Borrower: solo "Cerrar sesión" visible, sin Pipeline
+    homeBtn.style.display='none';
+    logoutBtn.style.display='flex';
+    logoutBtn.style.color='rgba(255,255,255,.75)';
+    logoutBtn.style.border='1.5px solid rgba(255,255,255,.25)';
+    logoutBtn.style.padding='8px 16px';
+    logoutBtn.style.borderRadius='20px';
+  }
+
+  /* Closing display */
+  let cdDisplay=t.noDate;
+  let daysDisplay='';
+  if(cd){
+    if(isPast) cdDisplay=t.pastDate;
+    else{
+      cdDisplay=cd.toLocaleDateString(t.dateLocale,t.dateOptions);
+      daysDisplay=t.daysLeft(days);
+    }
+  }
+
+  /* Loan type display */
+  const loanTypeDisplay=t.loanTypeMap[loan.loanType]||loan.loanType;
+  const loanProgDisplay=t.loanTypeMap[loan.loanProgram]||loan.loanProgram||'';
+  const tagline=t.tagline[loan.loanType]||t.tagline.default;
+
+  /* Borrower step (simplified timeline) */
+  const bStep=STAGE_TO_BSTEP[loan.stage]||0;
+  const bStages=t.bStages;
+  const totalBSteps=bStages.length;
+  const fillPct=bStep===0?0:Math.min(100,(bStep/(totalBSteps-1))*100);
+
+  const timelineHtml=bStages.map((lbl,i)=>{
+    const cls=i<bStep?'done':i===bStep?'current':'';
+    const dot=i<bStep?'✓':i===bStep?'●':(i+1);
+    return `<div class="bw-tl-step ${cls}"><div class="bw-tl-dot">${dot}</div><div class="bw-tl-label">${lbl}</div></div>`;
+  }).join('');
+
+  /* Status banner */
+  const statusMap={
+    es:{
+      0:{text:'Nuestro equipo está revisando tu información y te contactaremos muy pronto.',title:'Tu archivo está siendo revisado.',type:'info'},
+      1:{text:'Estamos analizando tu perfil para determinar las mejores opciones disponibles.',title:'Pre-aprobación en proceso.',type:'info'},
+      2:{text:'Tu solicitud está en manos del equipo de procesamiento.',title:'Aplicación en revisión.',type:'info'},
+      3:{text:'El equipo está organizando y verificando toda tu documentación.',title:'En procesamiento.',type:'info'},
+      4:{text:'Tu expediente fue enviado al underwriter. Este proceso puede tomar de 3 a 7 días hábiles.',title:'En revisión de underwriting.',type:'amber'},
+      5:{text:'¡Tu préstamo fue aprobado condicionalmente! Tu equipo te contactará con las condiciones específicas.',title:'¡Aprobación condicional! 🎉',type:'success'},
+      6:{text:'¡Todas las condiciones fueron aprobadas! Nuestro equipo ya está coordinando los pasos finales para el cierre. Te contactaremos con los próximos detalles y fechas disponibles.',title:'🟢 Clear to Close',type:'success'},
+      7:{text:'Revisa tu Closing Disclosure con cuidado antes de llegar a la firma.',title:'Tu cierre está programado. 🏠',type:'amber'},
+      8:{text:'Los fondos fueron liberados. Tu préstamo está siendo registrado con el condado.',title:'¡Préstamo fondeado! 💰',type:'success'},
+      9:{text:'¡Lo lograste! Gracias por confiar en District Home Loans.',title:'¡Préstamo cerrado exitosamente! 🎉',type:'success'}
+    },
+    en:{
+      0:{text:'Our team is reviewing your information and will contact you very soon.',title:'Your file is being reviewed.',type:'info'},
+      1:{text:"We are analyzing your profile to determine the best available options.",title:'Pre-approval in progress.',type:'info'},
+      2:{text:'Your application is in the hands of our processing team.',title:'Application under review.',type:'info'},
+      3:{text:'The team is organizing and verifying all your documentation.',title:'In processing.',type:'info'},
+      4:{text:'Your file has been submitted to the underwriter. This process typically takes 3 to 7 business days.',title:'Under underwriting review.',type:'amber'},
+      5:{text:'Your loan received conditional approval! Your team will contact you with the specific conditions.',title:'Conditional Approval! 🎉',type:'success'},
+      6:{text:'All conditions have been approved! Coordinate your closing date with the title company.',title:'Clear to Close! You are ready. 🟢',type:'success'},
+      7:{text:'Review your Closing Disclosure carefully before your signing appointment.',title:'Your closing is scheduled. 🏠',type:'amber'},
+      8:{text:'Funds have been released. Your loan is being recorded with the county.',title:'Loan funded! 💰',type:'success'},
+      9:{text:'You did it! Thank you for trusting District Home Loans.',title:'Loan closed successfully! 🎉',type:'success'}
+    }
+  };
+  const sm=statusMap[currentLang][loan.stage]||statusMap[currentLang][0];
+  const typeIcon={info:'ℹ️',success:'🎉',amber:'⏳',urgent:'⚠️'};
+
+  /* Entendiendo tu proceso */
+  const ec=getStageContent(loan.stage,loan.loanType,currentLang);
+  const bulletsHtml=ec.leftBullets.map(b=>`<li>${b}</li>`).join('');
+  const rightBulletsHtml=ec.rightBullets.map(b=>`<li><span class="bw-check-circle">✓</span><span>${b}</span></li>`).join('');
+
+  /* Map */
+  const mapSrc=`https://maps.google.com/maps?q=${encodeURIComponent(loan.address)}&output=embed&z=15`;
+
+  /* Feedback */
+  const alreadyFeedback=feedbackGiven[loan.id];
+  const feedbackHtml=alreadyFeedback
+    ?`<div class="feedback-thanks"><div class="feedback-thanks-icon">🙏</div><div class="feedback-thanks-text">${t.feedbackThanks}</div><div class="feedback-thanks-sub">${t.feedbackThanksub}</div></div>`
+    :`<div class="bw-feedback-title">${t.feedbackTitle}</div>
+      <div class="bw-feedback-sub">${t.feedbackSub}</div>
+      <div class="star-row" id="star-row-${loan.id}">
+        ${[1,2,3,4,5].map(n=>`<button class="star-btn" data-val="${n}" onclick="setStars('${loan.id}',${n})">⭐</button>`).join('')}
+      </div>
+      <textarea class="feedback-comment" id="feedback-comment-${loan.id}" placeholder="${t.feedbackPlaceholder}"></textarea>
+      <button class="feedback-submit" onclick="submitFeedback('${loan.id}')">${t.feedbackSubmit}</button>`;
+
+  document.getElementById('bw-body').innerHTML=`
+
+    <!-- HERO CARD -->
+    <div class="bw-hero-card">
+      <div class="bw-hero-left">
+        <div class="bw-hero-greeting-hola">${loan.firstName ? t.greeting : t.greeting+' 👋'}</div>
+        ${loan.firstName ? `<div class="bw-hero-greeting-name">${loan.firstName} <span>👋</span></div>` : ''}
+        <p class="bw-hero-tagline">${tagline}</p>
+        <div class="bw-trust">
+          <div class="bw-trust-icon">🤝</div>
+          <div class="bw-trust-text">${t.trust}</div>
+        </div>
+      </div>
+      <div class="bw-hero-right">
+        <div class="bw-hero-photo">
+          <div class="bw-hero-rug"></div>
+          <div class="bw-hero-sofa"></div>
+          <div class="bw-hero-table"></div>
+          <div class="bw-hero-plant">
+            <div class="bw-hero-plant-top"></div>
+            <div class="bw-hero-plant-stem"></div>
+            <div class="bw-hero-plant-pot"></div>
+          </div>
+          <div class="bw-hero-dot1"></div>
+          <div class="bw-hero-dot2"></div>
+          <div class="bw-hero-logo-card">
+            <div class="bw-logo-card-word">DISTRICT <span>HOME</span><br>LOANS</div>
+            <div class="bw-logo-card-flag">
+              <div class="bw-logo-flag-bar" style="background:var(--navy)"></div>
+              <div class="bw-logo-flag-bar" style="background:var(--red)"></div>
+              <div class="bw-logo-flag-bar" style="background:var(--navy)"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INFO BAR -->
+    <div class="bw-info-bar">
+      <div class="bw-info-item">
+        <div class="bw-info-icon">🏠</div>
+        <div>
+          <div class="bw-info-label">${t.loanTypeLabel}</div>
+          <div class="bw-info-val">${loanTypeDisplay}</div>
+          ${loanProgDisplay?`<div class="bw-info-sub">${loanProgDisplay}</div>`:''}
+        </div>
+      </div>
+      <div class="bw-info-item">
+        <div class="bw-info-icon">👥</div>
+        <div>
+          <div class="bw-info-label">${t.yourLO}</div>
+          <div class="bw-info-val">${loan.lo}</div>
+          <div class="bw-info-sub">${t.loSub}</div>
+        </div>
+      </div>
+      <div class="bw-info-item">
+        <div class="bw-info-icon">📅</div>
+        <div>
+          <div class="bw-info-label">${t.estClosing}</div>
+          <div class="bw-info-val-big" style="${isUrgent?'color:var(--alert)':''}">${daysDisplay||cdDisplay}</div>
+          ${daysDisplay&&cdDisplay!==t.noDate&&cdDisplay!==t.pastDate?`<div class="bw-info-sub">${t.dayNote}</div>`:''}
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="bw-section-header">
+      <div class="bw-section-title">${t.tuProceso}</div>
+      ${days!==null&&!isPast?`<div class="bw-section-meta">${t.cierreEst} ${daysDisplay} ${t.dayNote}</div>`:''}
+    </div>
+    <div class="bw-timeline-card">
+      <div style="position:relative">
+        <div class="bw-tl-track"></div>
+        <div class="bw-tl-fill" style="width:${fillPct}%"></div>
+        <div class="bw-timeline">${timelineHtml}</div>
+      </div>
+    </div>
+
+    <!-- STATUS BANNER -->
+    <div class="bw-status-banner ${sm.type}">
+      <div class="bw-status-icon">${typeIcon[sm.type]||'ℹ️'}</div>
+      <div><div class="bw-status-title">${sm.title}</div><div class="bw-status-body">${sm.text}</div></div>
+    </div>
+
+    <!-- LOAN DETAILS -->
+    <div class="bw-section-header"><div class="bw-section-title">${t.detalles}</div></div>
+    <div class="bw-details-grid">
+      <div class="bw-detail-card">
+        <div class="bw-detail-icon">📅</div>
+        <div class="bw-detail-label">${t.fechaCierre}</div>
+        <div class="bw-detail-val" style="${isUrgent?'color:var(--alert)':''}">${cdDisplay}</div>
+        ${daysDisplay?`<div class="bw-detail-sub" style="${isUrgent?'color:var(--alert);font-weight:700':''}">${daysDisplay}</div>`:''}
+      </div>
+      <div class="bw-detail-card">
+        <div class="bw-detail-icon">📄</div>
+        <div class="bw-detail-label">${t.etapaActual}</div>
+        <div class="bw-detail-val">${t.stageNames[loan.stage]}</div>
+        <div class="bw-detail-sub">${t.step(loan.stage+1,STAGES.length)}</div>
+      </div>
+      <div class="bw-detail-card">
+        <div class="bw-detail-icon">👤</div>
+        <div class="bw-detail-label">${t.processor}</div>
+        <div class="bw-detail-val">${loan.opsCode}</div>
+        <div class="bw-detail-sub">${t.opsTeam}</div>
+      </div>
+      <div class="bw-detail-card">
+        <div class="bw-detail-icon">📋</div>
+        <div class="bw-detail-label">${t.loanOfficer}</div>
+        <div class="bw-detail-val">${loan.lo}</div>
+        <div class="bw-detail-sub">District Home Loans</div>
+      </div>
+    </div>
+
+    <!-- MAP -->
+    <div class="bw-section-header"><div class="bw-section-title">${t.ubicacion}</div></div>
+    <div class="bw-map-wrap">
+      <div class="bw-map-badge">🏠 ${loan.address.split(',')[0]}</div>
+      <iframe src="${mapSrc}" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+
+    <!-- ENTENDIENDO TU PROCESO -->
+    <div class="bw-entendiendo">
+      <div class="bw-section-title">${t.entendiendo}</div>
+      <div class="bw-ent-grid">
+        <div>
+          <div class="bw-ent-col-title"><span style="font-size:18px">${ec.icon}</span>${ec.leftTitle}</div>
+          <div class="bw-ent-body">${ec.leftBody}</div>
+          <ul class="bw-ent-bullets">${bulletsHtml}</ul>
+          ${ec.timeTip?`<div class="bw-ent-time"><span class="bw-ent-time-icon">🕐</span><span>${ec.timeTip}</span></div>`:''}
+        </div>
+        <div>
+          <div class="bw-ent-col-title"><span style="font-size:18px">💡</span>${ec.rightTitle}</div>
+          <ul class="bw-ent-right-bullets">${rightBulletsHtml}</ul>
+          ${ec.tip?`<div class="bw-tip-box"><span class="bw-tip-icon">⚡</span><span>${ec.tip}</span></div>`:''}
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT CTA -->
+    <div class="bw-contact">
+      <div class="bw-contact-icon">🎧</div>
+      <div class="bw-contact-text">
+        <div class="bw-contact-title">${t.necesitasAyuda}</div>
+        <div class="bw-contact-sub">${t.contactSub}</div>
+      </div>
+      <button class="bw-contact-btn" onclick="window.location.href='tel:8773430472'">
+        ${t.contactBtn} →
+      </button>
+    </div>
+
+    <!-- FUTURE SERVICES -->
+    <div class="bw-future">
+      <div class="bw-future-title">${t.futureTitle}</div>
+      <div class="bw-future-sub">${t.futureSub}</div>
+      <div class="bw-future-btns">
+        <a href="https://districthomeloans.com/buy-a-house/" target="_blank" class="bw-future-btn ghost">${t.futureBuyBtn}</a>
+        <a href="https://ypx.806.myftpupload.com/refinance/" target="_blank" class="bw-future-btn ghost">${t.futureRefiBtn}</a>
+      </div>
+      <hr class="bw-future-rule">
+      <div class="bw-future-deal-label">${t.futureDealLabel}</div>
+      <div class="bw-future-deal-title">${t.futureDealTitle}</div>
+      <div class="bw-future-deal-text">${t.futureDealText}</div>
+      <a href="https://prod.lendingpad.com/district-home-loans-llc/pos" target="_blank" class="bw-future-apply">${t.futureApplyBtn}</a>
+    </div>
+
+    <!-- FEEDBACK -->
+    <div class="bw-feedback" id="feedback-box-${loan.id}">${feedbackHtml}</div>
+  `;
+}
+
+/* ══════════════════════════════════════════════
+   FEEDBACK
+══════════════════════════════════════════════ */
+function setStars(loanId,val){
+  selectedStars[loanId]=val;
+  const row=document.getElementById(`star-row-${loanId}`);
+  if(!row)return;
+  row.querySelectorAll('.star-btn').forEach(btn=>btn.classList.toggle('active',parseInt(btn.dataset.val)<=val));
+}
+function submitFeedback(loanId){
+  const t=T[currentLang];
+  const stars=selectedStars[loanId]||0;
+  if(!stars){showToast('⭐ Please select a star rating first');return}
+  const comment=(document.getElementById(`feedback-comment-${loanId}`)?.value||'').trim();
+  feedbackGiven[loanId]={stars,comment,date:new Date().toISOString()};
+  const box=document.getElementById(`feedback-box-${loanId}`);
+  if(box){box.innerHTML=`<div class="feedback-thanks"><div class="feedback-thanks-icon">🙏</div><div class="feedback-thanks-text">${t.feedbackThanks} ${'⭐'.repeat(stars)}</div><div class="feedback-thanks-sub">${t.feedbackThanksub}</div></div>`}
+  showToast('🙏 '+t.feedbackThanks);
+}
+</script>
+</body>
+</html>
