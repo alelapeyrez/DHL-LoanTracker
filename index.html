@@ -534,10 +534,11 @@ input,select,textarea{font-family:inherit}
 const STAGES=['Lead','Pre-Approval','Application','Processing','Submitted UW','Cond. Approval','Clear to Close','Closing','Funded','Closed'];
 const SEMOJI=['📋','✅','📝','⚙️','📨','🟡','🟢','🏠','💰','🎉'];
 
-// Maps internal stage (0-9) to simplified borrower step (0-7)
-const STAGE_TO_BSTEP=[0,1,2,2,3,4,5,6,6,7];
-const B_STAGES_ES=['Solicitud','Pre-aprobación','Documentos','Underwriting','Condiciones','Clear to Close','Cierre','¡Logrado!'];
-const B_STAGES_EN=['Application','Pre-Approval','Documents','Underwriting','Conditions','Clear to Close','Closing','Done!'];
+// Maps internal stage (0-9) to simplified borrower step (0-8)
+// Stage 6 (CTC) → step 5 | Stage 7 (Closing) → step 7 (CD Signed=6 queda como "done") | Stage 8-9 → 7-8
+const STAGE_TO_BSTEP=[0,1,2,2,3,4,5,7,7,8];
+const B_STAGES_ES=['Solicitud','Pre-aprobación','Documentos','Underwriting','Condiciones','Clear to Close','CD Firmado','Cierre','¡Logrado!'];
+const B_STAGES_EN=['Application','Pre-Approval','Documents','Underwriting','Conditions','Clear to Close','CD Signed','Closing','Done!'];
 
 function detectState(a){if(!a)return'';const u=a.toUpperCase();if(u.includes(', VA '))return'VA';if(u.includes(', MD '))return'MD';if(u.includes(', DC '))return'DC';return'';}
 
