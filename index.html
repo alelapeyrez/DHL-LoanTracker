@@ -154,8 +154,8 @@ input,select,textarea{font-family:inherit}
 /* ── HERO CARD ── */
 .bw-hero-card{background:#fff;border-radius:20px;box-shadow:var(--shadow-lg);overflow:hidden;display:grid;grid-template-columns:1fr 1fr;margin-bottom:20px;min-height:280px}
 .bw-hero-left{padding:32px 32px 32px 36px;display:flex;flex-direction:column;justify-content:center}
-.bw-hero-greeting-hola{font-size:30px;font-style:italic;color:var(--red);font-weight:700;line-height:1;margin-bottom:2px}
-.bw-hero-greeting-name{font-size:38px;font-weight:900;color:var(--navy);line-height:1.1;margin-bottom:18px;display:block}
+.bw-hero-greeting-hola{font-size:14px;font-weight:600;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.bw-hero-greeting-name{font-size:24px;font-weight:900;color:var(--navy);line-height:1.3;margin-bottom:18px;display:block}
 .bw-hero-tagline{font-size:13px;color:var(--text2);line-height:1.7;font-weight:500;margin-bottom:18px;max-width:340px}
 .bw-trust{display:flex;align-items:flex-start;gap:10px;background:#fef2f2;border-radius:10px;padding:12px 14px}
 .bw-trust-icon{font-size:18px;flex-shrink:0;margin-top:1px}
@@ -555,7 +555,7 @@ const loans=[
   {id:'427',borrower:'Ramirez',namePre:'',nameBold:'Ramirez',lender:'UWM',loanType:'Purchase',loanProgram:'Conventional',opsCode:'DR',address:'13825 Woodland Heights Drive, Hagerstown, MD 21742, Washington',lo:'Joel',stage:6,closingDate:'2026-05-26',stageDate:'2026-05-26'},
   {id:'1473',borrower:'Arias',namePre:'',nameBold:'Arias',lender:'UWM',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',address:'1517 Crest Road, Silver Spring, MD 20902, Montgomery',lo:'Edwin',stage:6,closingDate:'2026-05-22',stageDate:'2026-05-26'},
   {id:'1466',borrower:'crespin',namePre:'',nameBold:'crespin',lender:'UWM',loanType:'Purchase',loanProgram:'Conventional',opsCode:'DR',address:'6810 Robinia Road, Temple Hills, MD 20748, Prince Georges',lo:'Mario',stage:4,closingDate:'2026-05-22',stageDate:'2026-05-26'},
-  {id:'1463',borrower:'Dorcely',namePre:'',nameBold:'Dorcely',lender:'UWM',loanType:'Purchase',loanProgram:'FHA',opsCode:'DR',address:'11122 Oak Leaf Drive, unit 88, Silver Spring, MD 20901, Montgomery',lo:'Silvia',stage:4,closingDate:'2026-05-29',stageDate:'2026-05-26'},
+  {id:'1463',borrower:'Dorcely',namePre:'Jocelyne T',nameBold:'Dorcely',lender:'UWM',loanType:'Purchase',loanProgram:'FHA',opsCode:'DR',address:'11122 Oak Leaf Drive Unit 88, Silver Spring, MD 20901',lo:'Silvia',stage:5,closingDate:'2026-05-29',stageDate:'2026-05-26'},
   {id:'1452',borrower:'Lopez',namePre:'',nameBold:'Lopez',lender:'Pennymac',loanType:'Refinance',loanProgram:'FHA',opsCode:'DR',address:'1420 Indiana Avenue, Woodbridge, VA 22191, Prince William',lo:'Mario',stage:4,closingDate:'2026-06-12',stageDate:'2026-05-26'},
   {id:'1477',borrower:'montero',namePre:'',nameBold:'montero',lender:'UWM',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',address:'4512 31st Street, Mount Rainier, MD 20712, Prince Georges',lo:'Joel',stage:1,closingDate:'2026-05-29',stageDate:'2026-05-26'},
   {id:'1485',borrower:'Gabriel Torres',namePre:'Gabriel',nameBold:'Torres',lender:'LendingPros',loanType:'Purchase',loanProgram:'Non-QM',opsCode:'DR',address:'19021 Grotto Lane, Germantown, MD 20874, Montgomery',lo:'Edwin',stage:4,closingDate:'2026-06-15',stageDate:'2026-05-26'},
@@ -1110,8 +1110,8 @@ function renderBorrowerPortal(loan){
     <!-- HERO CARD -->
     <div class="bw-hero-card">
       <div class="bw-hero-left">
-        <div class="bw-hero-greeting-hola">${t.greeting} 👋</div>
-        <div class="bw-hero-greeting-name">${fmtName(loan)}</div>
+        <div class="bw-hero-greeting-hola">${currentLang==='es'?'Tu préstamo · District Home Loans':'Your Loan · District Home Loans'}</div>
+        <div class="bw-hero-greeting-name">${fmtName(loan)} 👋</div>
         <p class="bw-hero-tagline">${tagline}</p>
         <div class="bw-trust">
           <div class="bw-trust-icon">🤝</div>
