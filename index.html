@@ -155,7 +155,7 @@ input,select,textarea{font-family:inherit}
 .bw-hero-card{background:#fff;border-radius:20px;box-shadow:var(--shadow-lg);overflow:hidden;display:grid;grid-template-columns:1fr 1fr;margin-bottom:20px;min-height:280px}
 .bw-hero-left{padding:32px 32px 32px 36px;display:flex;flex-direction:column;justify-content:center}
 .bw-hero-greeting-hola{font-size:30px;font-style:italic;color:var(--red);font-weight:700;line-height:1;margin-bottom:2px}
-.bw-hero-greeting-name{font-size:38px;font-weight:900;color:var(--navy);line-height:1.1;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.bw-hero-greeting-name{font-size:38px;font-weight:900;color:var(--navy);line-height:1.1;margin-bottom:18px;display:block}
 .bw-hero-tagline{font-size:13px;color:var(--text2);line-height:1.7;font-weight:500;margin-bottom:18px;max-width:340px}
 .bw-trust{display:flex;align-items:flex-start;gap:10px;background:#fef2f2;border-radius:10px;padding:12px 14px}
 .bw-trust-icon{font-size:18px;flex-shrink:0;margin-top:1px}
@@ -550,53 +550,16 @@ function fmtName(l){
 }
 
 const loans=[
-  // ── DATOS DESDE SHAREPOINT — Loans in process.xlsx — Pipeline tab ─────────────
-  // namePre=texto antes del apellido | nameBold=apellido resaltado | namePost=texto después
-  {id:'1419',borrower:'Carrillo',      namePre:'Juan M',          nameBold:'Carrillo',
-   loanAmount:'—',lender:'Deephaven Lending',loanType:'Refinance',loanProgram:'Conventional',opsCode:'KS',
-   address:'2901 Reed Street, Glenarden, MD 20706',lo:'Joel',
-   stage:2, closingDate:'2026-04-10', stageDate:'2026-05-20'},
-
-  {id:'427', borrower:'Ramirez',       namePre:'Emerson R Bran',  nameBold:'Ramirez',
-   loanAmount:'—',lender:'UWM',loanType:'Purchase',loanProgram:'Conventional',opsCode:'DR',
-   address:'13825 Woodland Heights Drive, Hagerstown, MD 21742',lo:'Joel',
-   stage:6, closingDate:'2026-05-26', stageDate:'2026-05-13'},
-
-  {id:'1473',borrower:'Arias',         namePre:'Sergio',          nameBold:'Arias',    namePost:'Crespin',
-   loanAmount:'—',lender:'UWM',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',
-   address:'1517 Crest Road, Silver Spring, MD 20902',lo:'Edwin',
-   stage:6, closingDate:'2026-05-22', stageDate:'2026-05-19'},
-
-  {id:'1466',borrower:'Crespin',       namePre:'Dariana E Amaya', nameBold:'Crespin',
-   loanAmount:'—',lender:'UWM',loanType:'Purchase',loanProgram:'Conventional',opsCode:'DR',
-   address:'6810 Robinia Road, Temple Hills, MD 20748',lo:'Mario',
-   stage:4, closingDate:'2026-05-29', stageDate:'2026-05-18'},
-
-  {id:'1463',borrower:'Dorcely',       namePre:'Jocelyne T',      nameBold:'Dorcely',
-   loanAmount:'—',lender:'UWM',loanType:'Purchase',loanProgram:'FHA',opsCode:'DR',
-   address:'11122 Oak Leaf Drive Unit 88, Silver Spring, MD 20901',lo:'Silvia',
-   stage:4, closingDate:'2026-05-29', stageDate:'2026-05-17'},
-
-  {id:'1452',borrower:'Lopez',         namePre:'Luis A',          nameBold:'Lopez',
-   loanAmount:'—',lender:'Pennymac',loanType:'Refinance',loanProgram:'FHA',opsCode:'DR',
-   address:'1420 Indiana Avenue, Woodbridge, VA 22191',lo:'Mario',
-   stage:4, closingDate:'2026-06-12', stageDate:'2026-05-15'},
-
-  {id:'1477',borrower:'Montero',       namePre:'Felix M',         nameBold:'Montero',  namePost:'Morales',
-   loanAmount:'—',lender:'UWM',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',
-   address:'4512 31st Street, Mount Rainier, MD 20712',lo:'Joel',
-   stage:1, closingDate:'2026-05-29', stageDate:'2026-05-20'},
-
-  {id:'1485',borrower:'Torres',        namePre:'Gabriel',         nameBold:'Torres',
-   loanAmount:'—',lender:'LendingPros',loanType:'Purchase',loanProgram:'Non-QM',opsCode:'DR',
-   address:'19021 Grotto Lane, Germantown, MD 20874',lo:'Edwin',
-   stage:4, closingDate:'2026-06-15', stageDate:'2026-05-19'},
-
-  {id:'1448',borrower:'Lopez del Aguila', namePre:'Isaac M',      nameBold:'Lopez',    namePost:'del Aguila',
-   firstName:'Isaac',
-   loanAmount:'—',lender:'HomeXpress Mortgage',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',
-   address:'1516 Opus Avenue, Capitol Heights, MD 20743',lo:'Silvia',
-   stage:3, closingDate:'2026-06-19', stageDate:'2026-05-22'}
+  // ── AUTO-SYNC desde SharePoint — 2026-05-26 14:48 ─────────────
+  {id:'1419',borrower:'Carrillo',namePre:'',nameBold:'Carrillo',lender:'Deephaven Lending',loanType:'Refinance',loanProgram:'Conventional',opsCode:'KS',address:'2901 Reed Street, Glenarden, MD 20706, Prince Georges',lo:'Joel',stage:2,closingDate:'2026-04-10',stageDate:'2026-05-26'},
+  {id:'427',borrower:'Ramirez',namePre:'',nameBold:'Ramirez',lender:'UWM',loanType:'Purchase',loanProgram:'Conventional',opsCode:'DR',address:'13825 Woodland Heights Drive, Hagerstown, MD 21742, Washington',lo:'Joel',stage:6,closingDate:'2026-05-26',stageDate:'2026-05-26'},
+  {id:'1473',borrower:'Arias',namePre:'',nameBold:'Arias',lender:'UWM',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',address:'1517 Crest Road, Silver Spring, MD 20902, Montgomery',lo:'Edwin',stage:6,closingDate:'2026-05-22',stageDate:'2026-05-26'},
+  {id:'1466',borrower:'crespin',namePre:'',nameBold:'crespin',lender:'UWM',loanType:'Purchase',loanProgram:'Conventional',opsCode:'DR',address:'6810 Robinia Road, Temple Hills, MD 20748, Prince Georges',lo:'Mario',stage:4,closingDate:'2026-05-22',stageDate:'2026-05-26'},
+  {id:'1463',borrower:'Dorcely',namePre:'',nameBold:'Dorcely',lender:'UWM',loanType:'Purchase',loanProgram:'FHA',opsCode:'DR',address:'11122 Oak Leaf Drive, unit 88, Silver Spring, MD 20901, Montgomery',lo:'Silvia',stage:4,closingDate:'2026-05-29',stageDate:'2026-05-26'},
+  {id:'1452',borrower:'Lopez',namePre:'',nameBold:'Lopez',lender:'Pennymac',loanType:'Refinance',loanProgram:'FHA',opsCode:'DR',address:'1420 Indiana Avenue, Woodbridge, VA 22191, Prince William',lo:'Mario',stage:4,closingDate:'2026-06-12',stageDate:'2026-05-26'},
+  {id:'1477',borrower:'montero',namePre:'',nameBold:'montero',lender:'UWM',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',address:'4512 31st Street, Mount Rainier, MD 20712, Prince Georges',lo:'Joel',stage:1,closingDate:'2026-05-29',stageDate:'2026-05-26'},
+  {id:'1485',borrower:'Gabriel Torres',namePre:'Gabriel',nameBold:'Torres',lender:'LendingPros',loanType:'Purchase',loanProgram:'Non-QM',opsCode:'DR',address:'19021 Grotto Lane, Germantown, MD 20874, Montgomery',lo:'Edwin',stage:4,closingDate:'2026-06-15',stageDate:'2026-05-26'},
+  {id:'1448',borrower:'Isaac Lopez del Aguila',namePre:'Isaac Lopez del',nameBold:'Aguila',lender:'HomeXpress Mortgage',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',address:'1516 Opus Avenue, Capitol Heights, MD 20743, Prince Georges',lo:'Silvia',stage:3,closingDate:'2026-06-19',stageDate:'2026-05-26'},
 ].map(l=>({...l,state:detectState(l.address)}));
 
 /* ══════════════════════════════════════════════
