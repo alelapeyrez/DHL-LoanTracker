@@ -544,58 +544,58 @@ function detectState(a){if(!a)return'';const u=a.toUpperCase();if(u.includes(', 
 
 const loans=[
   // ── DATOS SINCRONIZADOS DESDE SHAREPOINT — Loans in process.xlsx ──────────────
-  // Última sync: 2026-05-26 | Etapas: 0=Lead 1=Pre-Appr 2=Application 3=Processing 4=UW 5=Cond.Appr 6=CTC 7=Closing 8=Funded 9=Closed
-  {id:'1419',borrower:'Carrillo',loanAmount:'—',lender:'Deephaven Lending',loanType:'Refinance',loanProgram:'Conventional',opsCode:'KS',
+  // Última sync: 2026-05-26 | fullName = nombre completo | borrower = apellido (resaltado)
+  {id:'1419',borrower:'Carrillo',fullName:'Juan M',loanAmount:'—',lender:'Deephaven Lending',loanType:'Refinance',loanProgram:'Conventional',opsCode:'KS',
    address:'2901 Reed Street, Glenarden, MD 20706',lo:'Joel',
-   stage:2,          // "Initial Applic" → Application
+   stage:2,
    closingDate:'2026-04-10',stageDate:'2026-05-20',
    purpose:'Refi Cash out - HELOC'},
 
-  {id:'427',borrower:'Ramirez',loanAmount:'—',lender:'UWM',loanType:'Purchase',loanProgram:'Conventional',opsCode:'DR',
+  {id:'427',borrower:'Ramirez',fullName:'Emerson R Bran',loanAmount:'—',lender:'UWM',loanType:'Purchase',loanProgram:'Conventional',opsCode:'DR',
    address:'13825 Woodland Heights Drive, Hagerstown, MD 21742',lo:'Joel',
-   stage:6,           // "ctc" → Clear to Close ⚠️ CLOSING HOY 05/26
+   stage:6,
    closingDate:'2026-05-26',stageDate:'2026-05-13',
    purpose:'Purchase'},
 
-  {id:'1473',borrower:'Arias',loanAmount:'—',lender:'UWM',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',
+  {id:'1473',borrower:'Arias',fullName:'Sergio',loanAmount:'—',lender:'UWM',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',
    address:'1517 Crest Road, Silver Spring, MD 20902',lo:'Edwin',
-   stage:6,           // "ctc" → Clear to Close
+   stage:6,
    closingDate:'2026-05-22',stageDate:'2026-05-19',
    purpose:'Refi Cash Out'},
 
-  {id:'1466',borrower:'Crespin',loanAmount:'—',lender:'UWM',loanType:'Purchase',loanProgram:'Conventional',opsCode:'DR',
+  {id:'1466',borrower:'Crespin',fullName:'Dariana E Amaya',loanAmount:'—',lender:'UWM',loanType:'Purchase',loanProgram:'Conventional',opsCode:'DR',
    address:'6810 Robinia Road, Temple Hills, MD 20748',lo:'Mario',
-   stage:4,           // "UW" → Submitted UW
+   stage:4,
    closingDate:'2026-05-22',stageDate:'2026-05-18',
    purpose:'Purchase'},
 
-  {id:'1463',borrower:'Dorcely',loanAmount:'—',lender:'UWM',loanType:'Purchase',loanProgram:'FHA',opsCode:'DR',
+  {id:'1463',borrower:'Dorcely',fullName:'Jocelyne T',loanAmount:'—',lender:'UWM',loanType:'Purchase',loanProgram:'FHA',opsCode:'DR',
    address:'11122 Oak Leaf Drive Unit 88, Silver Spring, MD 20901',lo:'Silvia',
-   stage:4,           // "UW" → Submitted UW
+   stage:4,
    closingDate:'2026-05-29',stageDate:'2026-05-17',
    purpose:'Purchase'},
 
-  {id:'1452',borrower:'Lopez',loanAmount:'—',lender:'Pennymac',loanType:'Refinance',loanProgram:'FHA',opsCode:'DR',
+  {id:'1452',borrower:'Lopez',fullName:'Luis A',loanAmount:'—',lender:'Pennymac',loanType:'Refinance',loanProgram:'FHA',opsCode:'DR',
    address:'1420 Indiana Avenue, Woodbridge, VA 22191',lo:'Mario',
-   stage:4,           // "UW" → Submitted UW
+   stage:4,
    closingDate:'2026-06-12',stageDate:'2026-05-15',
    purpose:'Refi Cash Out'},
 
-  {id:'1477',borrower:'Montero',loanAmount:'—',lender:'UWM',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',
+  {id:'1477',borrower:'Montero',fullName:'Felix M',loanAmount:'—',lender:'UWM',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',
    address:'4512 31st Street, Mount Rainier, MD 20712',lo:'Joel',
-   stage:1,           // "File Imported" → Pre-Approval
+   stage:1,
    closingDate:'2026-05-29',stageDate:'2026-05-20',
    purpose:'No Cash Out Refinance'},
 
-  {id:'1485',borrower:'Torres',firstName:'Gabriel',loanAmount:'—',lender:'LendingPros',loanType:'Purchase',loanProgram:'Non-QM',opsCode:'DR',
+  {id:'1485',borrower:'Torres',fullName:'Gabriel',firstName:'Gabriel',loanAmount:'—',lender:'LendingPros',loanType:'Purchase',loanProgram:'Non-QM',opsCode:'DR',
    address:'19021 Grotto Lane, Germantown, MD 20874',lo:'Edwin',
-   stage:4,           // "UW" → Submitted UW
+   stage:4,
    closingDate:'2026-06-15',stageDate:'2026-05-19',
    purpose:'Purchase'},
 
-  {id:'1448',borrower:'Lopez del Aguila',firstName:'Isaac',loanAmount:'—',lender:'HomeXpress Mortgage',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',
+  {id:'1448',borrower:'Lopez del Aguila',fullName:'Isaac',firstName:'Isaac',loanAmount:'—',lender:'HomeXpress Mortgage',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',
    address:'1516 Opus Avenue, Capitol Heights, MD 20743',lo:'Silvia',
-   stage:3,           // "Appraisal Ordered" → Processing
+   stage:3,
    closingDate:'2026-06-19',stageDate:'2026-05-22',
    purpose:'Refinance'}
 ].map(l=>({...l,state:detectState(l.address)}));
@@ -1023,7 +1023,7 @@ function renderLoans(list){
     const urg=days!==null&&days<=7&&days>=0;
     const cdStr=cd?`${cd.toLocaleDateString('en-US',{month:'short',day:'numeric'})}${urg?` ⚠️ ${days}d`:''}` :'—';
     return `<tr class="loan-row" onclick="openBorrowerFromDashboard('${l.id}')">
-      <td><div class="loan-id">LP# ${l.id}</div><div class="loan-borrower" style="margin-top:4px">${l.firstName||l.borrower}</div><div class="loan-address">${l.address}</div></td>
+      <td><div class="loan-id">LP# ${l.id}</div><div class="loan-borrower" style="margin-top:4px">${l.fullName?`${l.fullName} <span style="color:var(--red);font-weight:900">${l.borrower}</span>`:l.borrower}</div><div class="loan-address">${l.address}</div></td>
       <td><div class="loan-lender">${l.lender}</div><div style="margin-top:4px"><span class="loan-type-badge ${tc}">${l.loanType}</span>${l.loanProgram?`<span style="font-size:10px;color:var(--text3);margin-left:4px">${l.loanProgram}</span>`:''}</div></td>
       <td><div class="stage-pill s${l.stage}">${SEMOJI[l.stage]} ${STAGES[l.stage]}</div><div style="font-size:10px;color:var(--text3);margin-top:3px">Stage ${l.stage} of 9</div></td>
       <td><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="lo-badge">${l.lo}</span><span class="ops-badge">${l.opsCode}</span></div>${l.state?`<div style="font-size:10px;color:var(--text3);margin-top:3px">${l.state}</div>`:''}</td>
@@ -1148,8 +1148,8 @@ function renderBorrowerPortal(loan){
     <!-- HERO CARD -->
     <div class="bw-hero-card">
       <div class="bw-hero-left">
-        <div class="bw-hero-greeting-hola">${loan.firstName ? t.greeting : t.greeting+' 👋'}</div>
-        ${loan.firstName ? `<div class="bw-hero-greeting-name">${loan.firstName} <span>👋</span></div>` : ''}
+        <div class="bw-hero-greeting-hola">${t.greeting} 👋</div>
+        <div class="bw-hero-greeting-name">${loan.fullName?`${loan.fullName} `:''}${loan.firstName&&!loan.fullName?loan.firstName+' ':''}<span style="color:var(--red)">${loan.borrower}</span></div>
         <p class="bw-hero-tagline">${tagline}</p>
         <div class="bw-trust">
           <div class="bw-trust-icon">🤝</div>
