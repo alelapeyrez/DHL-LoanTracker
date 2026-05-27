@@ -160,64 +160,53 @@ input,select,textarea{font-family:inherit}
 .bw-body{max-width:860px;margin:0 auto;padding:24px 20px 60px;width:100%}
 
 /* ── HERO CARD ── */
-.bw-hero-card{background:#fff;border-radius:20px;box-shadow:var(--shadow-lg);overflow:hidden;display:grid;grid-template-columns:1fr 1fr;margin-bottom:20px;min-height:280px}
-.bw-hero-left{padding:32px 32px 32px 36px;display:flex;flex-direction:column;justify-content:center}
-.bw-hero-greeting-hola{font-size:14px;font-weight:600;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
-.bw-hero-greeting-name{font-size:24px;font-weight:900;color:var(--navy);line-height:1.3;margin-bottom:18px;display:block}
-.bw-hero-tagline{font-size:13px;color:var(--text2);line-height:1.7;font-weight:500;margin-bottom:18px;max-width:340px}
-.bw-trust{display:flex;align-items:flex-start;gap:10px;background:#fef2f2;border-radius:10px;padding:12px 14px}
+.bw-hero-card{background:#fff;border-radius:20px;box-shadow:var(--shadow-lg);overflow:hidden;display:grid;grid-template-columns:1fr 1fr;margin-bottom:20px}
+.bw-hero-left{padding:32px 32px 32px 36px;display:flex;flex-direction:column;justify-content:center;gap:0}
+.bw-hero-greeting-hola{font-size:12px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.bw-hero-greeting-name{font-size:26px;font-weight:900;color:var(--navy);line-height:1.25;margin-bottom:6px;display:block}
+.bw-hero-name-rule{width:40px;height:3px;background:var(--red);border-radius:2px;margin-bottom:16px}
+.bw-hero-tagline{font-size:13px;color:var(--text2);line-height:1.7;font-weight:500;margin-bottom:18px}
+.bw-trust{display:flex;align-items:flex-start;gap:10px;background:#fef2f2;border-radius:10px;padding:12px 14px;margin-bottom:18px}
 .bw-trust-icon{font-size:18px;flex-shrink:0;margin-top:1px}
 .bw-trust-text{font-size:12px;color:var(--text2);line-height:1.6}
+.bw-hero-contact{display:flex;flex-direction:column;gap:5px}
+.bw-hero-contact-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text3)}
+.bw-hero-contact-row span{color:var(--navy);font-weight:600}
 
-.bw-hero-right{position:relative;overflow:hidden;background:var(--navy)}
-/* CSS-only premium interior — no external images needed */
-.bw-hero-photo{
-  width:100%;height:100%;position:relative;
-  background:linear-gradient(145deg,var(--navy) 0%,#1e3a6e 50%,var(--navy3) 100%);
-}
-/* Floor */
-.bw-hero-photo::before{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:38%;
-  background:linear-gradient(180deg,#1c2f5a 0%,#16274f 100%);
-  border-radius:0;
-}
-/* Window / light glow */
-.bw-hero-photo::after{
-  content:'';position:absolute;top:12%;right:14%;width:52%;height:54%;
-  background:linear-gradient(135deg,rgba(255,220,140,.18) 0%,rgba(255,200,100,.08) 60%,transparent 100%);
-  border-radius:12px;
-  box-shadow:0 0 60px 20px rgba(255,200,100,.07);
-}
-/* Sofa silhouette */
-.bw-hero-sofa{
-  position:absolute;bottom:28%;left:50%;transform:translateX(-50%);
-  width:64%;height:22%;
-  background:linear-gradient(180deg,#2a4070 0%,#1e3060 100%);
-  border-radius:14px 14px 4px 4px;
-}
-.bw-hero-sofa::before{
-  content:'';position:absolute;bottom:100%;left:5%;right:5%;height:40%;
-  background:linear-gradient(180deg,#3a5080 0%,#2a4070 100%);
-  border-radius:10px 10px 0 0;
-}
-/* Plant silhouette */
-.bw-hero-plant{
-  position:absolute;bottom:32%;right:8%;width:10%;
-  display:flex;flex-direction:column;align-items:center;
-}
-.bw-hero-plant-stem{width:3px;height:40px;background:#1a3050;margin:0 auto}
-.bw-hero-plant-pot{width:18px;height:12px;background:#1a3050;border-radius:0 0 4px 4px}
-.bw-hero-plant-top{width:32px;height:32px;border-radius:50%;background:rgba(30,80,50,.7);margin-bottom:-4px}
-/* Table */
-.bw-hero-table{position:absolute;bottom:26%;left:8%;width:22%;height:6%;background:#1a3050;border-radius:6px 6px 2px 2px}
-/* Rug */
-.bw-hero-rug{position:absolute;bottom:20%;left:20%;right:20%;height:8%;background:linear-gradient(90deg,rgba(200,16,46,.08),rgba(200,16,46,.14),rgba(200,16,46,.08));border-radius:40px}
-/* Ambient dots */
-.bw-hero-dot1,.bw-hero-dot2{position:absolute;border-radius:50%}
-.bw-hero-dot1{width:120px;height:120px;top:-20px;left:-20px;background:radial-gradient(circle,rgba(200,16,46,.08) 0%,transparent 70%)}
-.bw-hero-dot2{width:80px;height:80px;bottom:10%;right:30%;background:radial-gradient(circle,rgba(255,200,100,.06) 0%,transparent 70%)}
+/* ── HERO RIGHT — dark panel con timeline vertical ── */
+.bw-hero-right{position:relative;overflow:hidden;background:linear-gradient(160deg,#0d1f3c 0%,#162040 60%,#0a1628 100%)}
+.bw-vtl-wrap{padding:24px 22px 20px;height:100%;display:flex;flex-direction:column;box-sizing:border-box}
+.bw-vtl-logo{text-align:right;margin-bottom:16px}
+.bw-vtl-logo-word{font-size:12px;font-weight:900;color:#fff;letter-spacing:.07em;line-height:1.3}
+.bw-vtl-logo-word span{color:var(--red)}
+.bw-vtl-logo-bars{display:flex;gap:3px;justify-content:flex-end;margin-top:5px}
+.bw-vtl-logo-bar{height:3px;width:24px;border-radius:2px}
+.bw-vtl-header{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px}
+.bw-vtl{flex:1;display:flex;flex-direction:column;gap:0;overflow:hidden}
+.bw-vtl-step{display:flex;align-items:flex-start;gap:11px;position:relative;padding-bottom:10px}
+.bw-vtl-step:not(:last-child)::before{content:'';position:absolute;left:11px;top:24px;width:2px;bottom:0;background:rgba(255,255,255,.1)}
+.bw-vtl-dot{width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;position:relative;z-index:1}
+.bw-vtl-dot.done{background:#1d4ed8;color:#fff}
+.bw-vtl-dot.cur-green{background:transparent;border:2.5px solid #4ade80;color:#4ade80}
+.bw-vtl-dot.cur-blue{background:transparent;border:2.5px solid #60a5fa;color:#60a5fa}
+.bw-vtl-dot.cur-orange{background:transparent;border:2.5px solid #fb923c;color:#fb923c}
+.bw-vtl-dot.cur-gray{background:transparent;border:2px solid rgba(255,255,255,.4);color:rgba(255,255,255,.4)}
+.bw-vtl-dot.upcoming{background:transparent;border:1.5px solid rgba(255,255,255,.15);color:rgba(255,255,255,.2);font-size:9px}
+.bw-vtl-text{flex:1;padding-top:3px}
+.bw-vtl-name{font-size:11.5px;font-weight:700;line-height:1.2;color:#fff}
+.bw-vtl-name.dim{color:rgba(255,255,255,.3);font-weight:500}
+.bw-vtl-badge{display:inline-block;font-size:9.5px;font-weight:700;margin-top:3px;padding:1px 6px;border-radius:8px}
+.bw-vtl-badge.c-green{background:rgba(74,222,128,.15);color:#4ade80}
+.bw-vtl-badge.c-blue{background:rgba(96,165,250,.15);color:#93c5fd}
+.bw-vtl-badge.c-orange{background:rgba(251,146,60,.15);color:#fb923c}
+.bw-vtl-badge.c-gray{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5)}
+.bw-vtl-footer{margin-top:auto;padding-top:12px;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;align-items:center}
+.bw-vtl-footer-label{font-size:10px;color:rgba(255,255,255,.4);font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.bw-vtl-footer-val{font-size:12px;font-weight:800;color:#fff}
+.bw-vtl-footer-lo{font-size:11px;color:rgba(255,255,255,.55)}
 
-.bw-hero-logo-card{position:absolute;top:16px;right:16px;background:#fff;border-radius:14px;padding:14px 18px;box-shadow:0 4px 24px rgba(0,0,0,.28);z-index:10;text-align:center}
+/* logo old (keep for compat) */
+.bw-hero-logo-card{display:none}
 .bw-logo-card-word{font-size:13px;font-weight:900;color:var(--navy);letter-spacing:.06em;line-height:1.3}
 .bw-logo-card-word span{color:var(--red)}
 .bw-logo-card-flag{display:flex;gap:3px;margin:6px 0 0;justify-content:center}
@@ -375,7 +364,9 @@ input,select,textarea{font-family:inherit}
   .loans-wrap,.filters-bar{padding-left:12px;padding-right:12px}
   .role-card{width:150px;padding:20px 14px}
   .bw-hero-card{grid-template-columns:1fr}
-  .bw-hero-right{height:180px}
+  .bw-hero-right{min-height:260px}
+  .bw-vtl{overflow-y:auto}
+  .bw-vtl-step{padding-bottom:7px}
   .bw-info-bar{grid-template-columns:1fr}
   .bw-details-grid{grid-template-columns:1fr 1fr}
   .bw-ent-grid{grid-template-columns:1fr}
@@ -588,6 +579,7 @@ const B_STEP_CONFIG=[
   {color:'green', icon:'✍️', es:'Firmado',       en:'Signed',        sub_es:'Los documentos fueron firmados',          sub_en:'Documents were signed'},
   {color:'green', icon:'💰', es:'Fondeo',        en:'Funding',       sub_es:'El préstamo fue desembolsado',            sub_en:'The loan was funded'},
   {color:'gray',  icon:'⚪',  es:'Post-Cierre',   en:'Post-Closing',  sub_es:'Revisión final administrativa',          sub_en:'Final administrative review'},
+  {color:'green', icon:'🎉', es:'¡Completado!',  en:'Complete!',     sub_es:'Tu préstamo está totalmente procesado. ¡Gracias por confiar en District Home Loans!', sub_en:'Your loan is fully processed. Thank you for trusting District Home Loans!'},
 ];
 const B_STAGES_ES=B_STEP_CONFIG.map(s=>s.es);
 const B_STAGES_EN=B_STEP_CONFIG.map(s=>s.en);
@@ -1157,22 +1149,9 @@ function renderBorrowerPortal(loan){
   const loanProgDisplay=t.loanTypeMap[loan.loanProgram]||loan.loanProgram||'';
   const tagline=t.tagline[loan.loanType]||t.tagline.default;
 
-  /* Borrower step (simplified timeline) */
+  /* Borrower step */
   const bStep=STAGE_TO_BSTEP[loan.stage]??0;
-  const fillPct=bStep===0?0:Math.min(100,(bStep/(B_STEP_CONFIG.length-1))*100);
-
-  const timelineHtml=B_STEP_CONFIG.map((s,i)=>{
-    const isDone=i<bStep, isCur=i===bStep;
-    const cls=isDone?'done':isCur?`current c-${s.color}`:'';
-    const dot=isDone?'✓':isCur?'●':(i+1);
-    const lbl=currentLang==='es'?s.es:s.en;
-    return `<div class="bw-tl-step ${cls}"><div class="bw-tl-dot">${dot}</div><div class="bw-tl-label">${lbl}</div></div>`;
-  }).join('');
-
   const curCfg=B_STEP_CONFIG[bStep];
-  const curLbl=currentLang==='es'?curCfg.es:curCfg.en;
-  const curSub=currentLang==='es'?curCfg.sub_es:curCfg.sub_en;
-  const currentStepCard=`<div class="bw-tl-current c-${curCfg.color}">${curCfg.icon} <strong>${curLbl}</strong>&ensp;—&ensp;${curSub}</div>`;
 
   /* Status banner */
   const statusMap={
@@ -1231,6 +1210,7 @@ function renderBorrowerPortal(loan){
       <div class="bw-hero-left">
         <div class="bw-hero-greeting-hola">${currentLang==='es'?'Tu préstamo · District Home Loans':'Your Loan · District Home Loans'}</div>
         <div class="bw-hero-greeting-name">${fmtName(loan)} 👋</div>
+        <div class="bw-hero-name-rule"></div>
         <p class="bw-hero-tagline">${tagline}</p>
         <div class="bw-trust">
           <div class="bw-trust-icon">🤝</div>
@@ -1238,25 +1218,38 @@ function renderBorrowerPortal(loan){
         </div>
       </div>
       <div class="bw-hero-right">
-        <div class="bw-hero-photo">
-          <div class="bw-hero-rug"></div>
-          <div class="bw-hero-sofa"></div>
-          <div class="bw-hero-table"></div>
-          <div class="bw-hero-plant">
-            <div class="bw-hero-plant-top"></div>
-            <div class="bw-hero-plant-stem"></div>
-            <div class="bw-hero-plant-pot"></div>
-          </div>
-          <div class="bw-hero-dot1"></div>
-          <div class="bw-hero-dot2"></div>
-          <div class="bw-hero-logo-card">
-            <div class="bw-logo-card-word">DISTRICT <span>HOME</span><br>LOANS</div>
-            <div class="bw-logo-card-flag">
-              <div class="bw-logo-flag-bar" style="background:var(--navy)"></div>
-              <div class="bw-logo-flag-bar" style="background:var(--red)"></div>
-              <div class="bw-logo-flag-bar" style="background:var(--navy)"></div>
+        <div class="bw-vtl-wrap">
+          <div class="bw-vtl-logo">
+            <div class="bw-vtl-logo-word">DISTRICT <span>HOME</span><br>LOANS</div>
+            <div class="bw-vtl-logo-bars">
+              <div class="bw-vtl-logo-bar" style="background:var(--navy)"></div>
+              <div class="bw-vtl-logo-bar" style="background:var(--red)"></div>
+              <div class="bw-vtl-logo-bar" style="background:var(--navy)"></div>
             </div>
           </div>
+          <div class="bw-vtl-header">${currentLang==='es'?'Estado actual de tu préstamo':'Current loan status'}</div>
+          <div class="bw-vtl">
+            ${B_STEP_CONFIG.map((s,i)=>{
+              const isDone=i<bStep, isCur=i===bStep;
+              const dotCls=isDone?'done':isCur?`cur-${s.color}`:'upcoming';
+              const dot=isDone?'✓':isCur?'●':(i+1);
+              const lbl=currentLang==='es'?s.es:s.en;
+              return `<div class="bw-vtl-step">
+                <div class="bw-vtl-dot ${dotCls}">${dot}</div>
+                <div class="bw-vtl-text">
+                  <div class="bw-vtl-name${!isDone&&!isCur?' dim':''}">${lbl}</div>
+                  ${isCur?`<div class="bw-vtl-badge c-${s.color}">${currentLang==='es'?'En progreso':'In progress'}</div>`:''}
+                </div>
+              </div>`;
+            }).join('')}
+          </div>
+          ${loan.closingDate&&!isPast?`<div class="bw-vtl-footer">
+            <div>
+              <div class="bw-vtl-footer-label">${currentLang==='es'?'Cierre estimado':'Est. closing'}</div>
+              <div class="bw-vtl-footer-val">${cdDisplay}</div>
+            </div>
+            <div class="bw-vtl-footer-lo">${loan.lo}</div>
+          </div>`:''}
         </div>
       </div>
     </div>
@@ -1287,20 +1280,6 @@ function renderBorrowerPortal(loan){
           ${daysDisplay&&cdDisplay!==t.noDate&&cdDisplay!==t.pastDate?`<div class="bw-info-sub">${t.dayNote}</div>`:''}
         </div>
       </div>
-    </div>
-
-    <!-- TIMELINE -->
-    <div class="bw-section-header">
-      <div class="bw-section-title">${t.tuProceso}</div>
-      ${days!==null&&!isPast?`<div class="bw-section-meta">${t.cierreEst} ${daysDisplay} ${t.dayNote}</div>`:''}
-    </div>
-    <div class="bw-timeline-card">
-      <div style="position:relative">
-        <div class="bw-tl-track"></div>
-        <div class="bw-tl-fill" style="width:${fillPct}%"></div>
-        <div class="bw-timeline">${timelineHtml}</div>
-      </div>
-      ${currentStepCard}
     </div>
 
     <!-- STATUS BANNER -->
