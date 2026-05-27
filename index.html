@@ -570,15 +570,15 @@ function fmtName(l){
 
 const loans=[
   // ── AUTO-SYNC desde SharePoint — 2026-05-26 14:48 ─────────────
-  {id:'1419',borrower:'Carrillo',namePre:'',nameBold:'Carrillo',lender:'Deephaven Lending',loanType:'Refinance',loanProgram:'Conventional',opsCode:'KS',address:'2901 Reed Street, Glenarden, MD 20706, Prince Georges',lo:'Joel',stage:2,closingDate:'2026-04-10',stageDate:'2026-05-26',channel:'Wholesale'},
-  {id:'427',borrower:'Emerson R Bran Ramirez',namePre:'Emerson R Bran',nameBold:'Ramirez',lender:'UWM',loanType:'Purchase',loanProgram:'Conventional',opsCode:'DR',address:'13825 Woodland Heights Drive, Hagerstown, MD 21742, Washington',lo:'Joel',stage:11,closingDate:'2026-05-26',stageDate:'2026-05-26',channel:'Correspondent'},
-  {id:'1473',borrower:'Sergio Arias Crespin',namePre:'Sergio Arias',nameBold:'Crespin',lender:'UWM',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',address:'1517 Crest Road, Silver Spring, MD 20902, Montgomery',lo:'Edwin',stage:10,closingDate:'2026-05-28',stageDate:'2026-05-26',channel:'Correspondent'},
-  {id:'1466',borrower:'crespin',namePre:'',nameBold:'crespin',lender:'UWM',loanType:'Purchase',loanProgram:'Conventional',opsCode:'DR',address:'6810 Robinia Road, Temple Hills, MD 20748, Prince Georges',lo:'Mario',stage:4,closingDate:'2026-05-22',stageDate:'2026-05-26',channel:'Wholesale'},
-  {id:'1463',borrower:'Jocelyne T Dorcely',namePre:'Jocelyne T',nameBold:'Dorcely',lender:'UWM',loanType:'Purchase',loanProgram:'FHA',opsCode:'DR',address:'11122 Oak Leaf Drive Unit 88, Silver Spring, MD 20901',lo:'Silvia',stage:5,closingDate:'2026-05-29',stageDate:'2026-05-26',channel:'Wholesale'},
-  {id:'1452',borrower:'Lopez',namePre:'',nameBold:'Lopez',lender:'Pennymac',loanType:'Refinance',loanProgram:'FHA',opsCode:'DR',address:'1420 Indiana Avenue, Woodbridge, VA 22191, Prince William',lo:'Mario',stage:4,closingDate:'2026-06-12',stageDate:'2026-05-26',channel:'Wholesale'},
-  {id:'1477',borrower:'montero',namePre:'',nameBold:'montero',lender:'UWM',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',address:'4512 31st Street, Mount Rainier, MD 20712, Prince Georges',lo:'Joel',stage:1,closingDate:'2026-05-29',stageDate:'2026-05-26',channel:'Wholesale'},
-  {id:'1485',borrower:'Gabriel Torres',namePre:'Gabriel',nameBold:'Torres',lender:'LendingPros',loanType:'Purchase',loanProgram:'Non-QM',opsCode:'DR',address:'19021 Grotto Lane, Germantown, MD 20874, Montgomery',lo:'Edwin',stage:4,closingDate:'2026-06-15',stageDate:'2026-05-26',channel:'Wholesale'},
-  {id:'1448',borrower:'Isaac Lopez del Aguila',namePre:'Isaac Lopez del',nameBold:'Aguila',lender:'HomeXpress Mortgage',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',address:'1516 Opus Avenue, Capitol Heights, MD 20743, Prince Georges',lo:'Silvia',stage:3,closingDate:'2026-06-19',stageDate:'2026-05-26',channel:'Wholesale'},
+  {id:'1419',borrower:'Carrillo',namePre:'',nameBold:'Carrillo',lender:'Deephaven Lending',loanType:'Refinance',loanProgram:'Conventional',opsCode:'KS',address:'2901 Reed Street, Glenarden, MD 20706, Prince Georges',lo:'Joel',stage:2,closingDate:'2026-04-10',stageDate:'2026-05-26',channel:'Wholesale',lenderLoanNum:'4260216501'},
+  {id:'427',borrower:'Emerson R Bran Ramirez',namePre:'Emerson R Bran',nameBold:'Ramirez',lender:'UWM',loanType:'Purchase',loanProgram:'Conventional',opsCode:'DR',address:'13825 Woodland Heights Drive, Hagerstown, MD 21742, Washington',lo:'Joel',stage:11,closingDate:'2026-05-26',stageDate:'2026-05-26',channel:'Correspondent',lenderLoanNum:'1526194550'},
+  {id:'1473',borrower:'Sergio Arias Crespin',namePre:'Sergio Arias',nameBold:'Crespin',lender:'UWM',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',address:'1517 Crest Road, Silver Spring, MD 20902, Montgomery',lo:'Edwin',stage:10,closingDate:'2026-05-28',stageDate:'2026-05-26',channel:'Correspondent',lenderLoanNum:'1526198250'},
+  {id:'1466',borrower:'crespin',namePre:'',nameBold:'crespin',lender:'UWM',loanType:'Purchase',loanProgram:'Conventional',opsCode:'DR',address:'6810 Robinia Road, Temple Hills, MD 20748, Prince Georges',lo:'Mario',stage:4,closingDate:'2026-05-22',stageDate:'2026-05-26',channel:'Wholesale',lenderLoanNum:'1526188984'},
+  {id:'1463',borrower:'Jocelyne T Dorcely',namePre:'Jocelyne T',nameBold:'Dorcely',lender:'UWM',loanType:'Purchase',loanProgram:'FHA',opsCode:'DR',address:'11122 Oak Leaf Drive Unit 88, Silver Spring, MD 20901',lo:'Silvia',stage:5,closingDate:'2026-05-29',stageDate:'2026-05-26',channel:'Wholesale',lenderLoanNum:'1226266281'},
+  {id:'1452',borrower:'Lopez',namePre:'',nameBold:'Lopez',lender:'Pennymac',loanType:'Refinance',loanProgram:'FHA',opsCode:'DR',address:'1420 Indiana Avenue, Woodbridge, VA 22191, Prince William',lo:'Mario',stage:4,closingDate:'2026-06-12',stageDate:'2026-05-26',channel:'Wholesale',lenderLoanNum:'6192232888'},
+  {id:'1477',borrower:'montero',namePre:'',nameBold:'montero',lender:'UWM',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',address:'4512 31st Street, Mount Rainier, MD 20712, Prince Georges',lo:'Joel',stage:1,closingDate:'2026-05-29',stageDate:'2026-05-26',channel:'Wholesale',lenderLoanNum:'1526230127'},
+  {id:'1485',borrower:'Gabriel Torres',namePre:'Gabriel',nameBold:'Torres',lender:'LendingPros',loanType:'Purchase',loanProgram:'Non-QM',opsCode:'DR',address:'19021 Grotto Lane, Germantown, MD 20874, Montgomery',lo:'Edwin',stage:4,closingDate:'2026-06-15',stageDate:'2026-05-26',channel:'Wholesale',lenderLoanNum:'2605201464'},
+  {id:'1448',borrower:'Isaac Lopez del Aguila',namePre:'Isaac Lopez del',nameBold:'Aguila',lender:'HomeXpress Mortgage',loanType:'Refinance',loanProgram:'Conventional',opsCode:'DR',address:'1516 Opus Avenue, Capitol Heights, MD 20743, Prince Georges',lo:'Silvia',stage:3,closingDate:'2026-06-19',stageDate:'2026-05-26',channel:'Wholesale',lenderLoanNum:'2000082744'},
 ].map(l=>({...l,state:detectState(l.address)}));
 
 /* ══════════════════════════════════════════════
@@ -825,6 +825,24 @@ function getStageContent(stage, loanType, lang){
         rightTitle:'Siempre estamos aquí',
         rightBullets:['Para referidos de amigos y familiares que necesiten un préstamo.','Si en el futuro deseas vender o refinanciar de nuevo.','Para cualquier pregunta sobre tu préstamo actual o futuras necesidades financieras.'],
         tip:null
+      },
+      10:{
+        leftTitle:'Tu fondeo está programado 📅',icon:'📅',
+        leftBody:'¡Excelente noticia! Tu préstamo tiene una fecha de fondeo confirmada. El prestamista ha aprobado el disbursement y estamos coordinando los últimos detalles para completar tu cierre.',
+        leftBullets:['El departamento de funding del prestamista está revisando los documentos finales.','La compañía de título está preparada para recibir los fondos.',isRefi?'Una vez fondeado, tu nueva tasa y pago mensual entrarán en vigor.':'Una vez que se liberen los fondos, recibirás las llaves de tu propiedad.'],
+        timeTip:'El fondeo típicamente ocurre el mismo día del cierre o al día siguiente.',
+        rightTitle:'¿Qué debes saber?',
+        rightBullets:['No hagas cambios financieros de último momento — el prestamista puede hacer una verificación final.','Mantente disponible en caso de que necesitemos confirmarte algún detalle.','¡Estás a horas de completar tu proceso!'],
+        tip:null
+      },
+      11:{
+        leftTitle:'Tu préstamo está en post-cierre',icon:'🔄',
+        leftBody:'Tu préstamo ha cerrado exitosamente. El equipo de post-cierre está procesando la documentación final, incluyendo el registro oficial con el condado y la transferencia al servicer.',
+        leftBullets:['El préstamo será registrado oficialmente con el condado en los próximos días.','Recibirás información del servicer (empresa que administrará tus pagos) dentro de los próximos 15-30 días.','El equipo de operaciones está completando los trámites administrativos finales.'],
+        timeTip:null,
+        rightTitle:'Próximos pasos importantes',
+        rightBullets:['Guarda todos tus documentos de cierre en un lugar seguro.','Configura el pago automático con tu servicer cuando recibas la información.',isRefi?'Cancela los pagos automáticos de tu préstamo anterior una vez que el payoff sea confirmado.':'Actualiza tu dirección y registra la propiedad con el condado si es necesario.','¡Gracias por confiar en District Home Loans!'],
+        tip:null
       }
     },
     en:{
@@ -916,6 +934,24 @@ function getStageContent(stage, loanType, lang){
         timeTip:null,
         rightTitle:"We're always here",
         rightBullets:['For referrals of friends and family who need a loan.','If you ever want to sell or refinance again in the future.','For any questions about your current loan or future financial needs.'],
+        tip:null
+      },
+      10:{
+        leftTitle:'Your funding is scheduled 📅',icon:'📅',
+        leftBody:"Great news! Your loan has a confirmed funding date. The lender has approved the disbursement and we're coordinating the final details to complete your closing.",
+        leftBullets:["The lender's funding department is reviewing the final documents.",'The title company is ready to receive the funds.',isRefi?'Once funded, your new rate and monthly payment will take effect.':'Once funds are released, you will receive the keys to your property.'],
+        timeTip:'Funding typically occurs the same day as closing or the following business day.',
+        rightTitle:'What should you know?',
+        rightBullets:["Don't make any last-minute financial changes — the lender may run a final verification.",'Stay available in case we need to confirm any final details with you.','You are hours away from completing your process!'],
+        tip:null
+      },
+      11:{
+        leftTitle:'Your loan is in post-closing',icon:'🔄',
+        leftBody:"Your loan has closed successfully. The post-closing team is processing the final documentation, including the official county recording and transfer to your loan servicer.",
+        leftBullets:['The loan will be officially recorded with the county within the next few days.','You will receive servicer information (who manages your payments) within the next 15-30 days.','The operations team is completing final administrative tasks.'],
+        timeTip:null,
+        rightTitle:'Important next steps',
+        rightBullets:['Keep all your closing documents in a safe place.','Set up automatic payments with your servicer once you receive their information.',isRefi?'Cancel automatic payments on your previous loan once the payoff is confirmed.':'Update your address and register the property with the county if needed.','Thank you for trusting District Home Loans!'],
         tip:null
       }
     }
@@ -1031,7 +1067,7 @@ function renderLoans(list){
     const cdStr=cd?`${cd.toLocaleDateString('en-US',{month:'short',day:'numeric'})}${urg?` ⚠️ ${days}d`:''}` :'—';
     return `<tr class="loan-row" onclick="openBorrowerFromDashboard('${l.id}')">
       <td><div class="loan-id">LP# ${l.id}</div><div class="loan-borrower" style="margin-top:4px">${fmtName(l)}</div><div class="loan-address">${l.address}</div></td>
-      <td><div class="loan-lender">${l.lender} <span style="font-size:10px;color:var(--text3);font-weight:600">#${l.id}</span></div><div style="margin-top:4px;display:flex;align-items:center;flex-wrap:wrap;gap:4px"><span class="loan-type-badge ${tc}">${l.loanType}</span>${l.loanProgram?`<span style="font-size:10px;color:var(--text3)">${l.loanProgram}</span>`:''}</div>${l.channel?`<span class="channel-badge ch-${l.channel.toLowerCase()}">${l.channel}</span>`:''}</td>
+      <td><div class="loan-lender">${l.lender}${l.lenderLoanNum?` <span style="font-size:10px;color:var(--text3);font-weight:600">#${l.lenderLoanNum}</span>`:''}</div><div style="margin-top:4px;display:flex;align-items:center;flex-wrap:wrap;gap:4px"><span class="loan-type-badge ${tc}">${l.loanType}</span>${l.loanProgram?`<span style="font-size:10px;color:var(--text3)">${l.loanProgram}</span>`:''}</div>${l.channel?`<span class="channel-badge ch-${l.channel.toLowerCase()}">${l.channel}</span>`:''}</td>
       <td><div class="stage-pill s${l.stage}">${SEMOJI[l.stage]||'📋'} ${STAGES[l.stage]||'—'}</div><div style="font-size:10px;color:var(--text3);margin-top:3px">Stage ${Math.min(l.stage,9)+1} of 10</div></td>
       <td><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="lo-badge">${l.lo}</span><span class="ops-badge">${l.opsCode}</span></div>${l.state?`<div style="font-size:10px;color:var(--text3);margin-top:3px">${l.state}</div>`:''}</td>
       <td><span class="${urg?'cd-urgent':'cd-date'}">${cdStr}</span></td>
@@ -1261,6 +1297,12 @@ function renderBorrowerPortal(loan){
         <div class="bw-detail-val">${loan.lo}</div>
         <div class="bw-detail-sub">District Home Loans</div>
       </div>
+      ${loan.lenderLoanNum?`<div class="bw-detail-card">
+        <div class="bw-detail-icon">🏦</div>
+        <div class="bw-detail-label">${currentLang==='es'?'# de File (Lender)':'Lender File #'}</div>
+        <div class="bw-detail-val" style="font-size:13px;letter-spacing:.03em">${loan.lenderLoanNum}</div>
+        <div class="bw-detail-sub">${loan.lender}</div>
+      </div>`:''}
     </div>
 
     <!-- MAP -->
